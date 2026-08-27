@@ -1,116 +1,217 @@
 import { useState, useEffect } from 'react';
-import { User, Mail, Phone, MapPin, Shield, CheckCircle2 } from 'lucide-react';
+import { User, Mail, Phone, MapPin, CreditCard, Shield, Calendar, Activity, Heart, Home, Camera } from 'lucide-react';
 
 export default function Perfil() {
-  const [perfil, setPerfil] = useState<any>(null);
-  const [carregando, setCarregando] = useState(true);
-  const [mensagem, setMensagem] = useState('');
+  // Estado para armazenar a foto de perfil
+  const [fotoPerfil, setFotoPerfil] = useState<string | null>(null);
+  
+  // NOVO: Estado para armazenar os dados reais do banco
+  const [usuario, setUsuario] = useState<any>({
+    nome: 'Carregando...',
+    cpf: '...',
+    cns: '...',
+    email: '...',
+    telefone: '...',
+    cidade: 'Carregando...'
+  });
 
+  // NOVO: Busca os dados de quem logou assim que a tela abre
   useEffect(() => {
-    fetch('http://localhost:5000/api/perfil')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.sucesso) {
-          setPerfil(data.dados);
-        }
-        setCarregando(false);
-      });
+    const usuarioId = localStorage.getItem('usuarioId');
+    if (usuarioId) {
+      fetch(`http://localhost:5000/api/usuarios/${usuarioId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.sucesso) {
+            setUsuario(data.dados);
+          }
+        })
+        .catch(erro => console.error("Erro ao carregar perfil", erro));
+    }
   }, []);
 
-  const handleSalvar = (e: React.FormEvent) => {
-    e.preventDefault();
-    fetch('http://localhost:5000/api/perfil', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(perfil)
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.sucesso) {
-          setMensagem('Dados atualizados com sucesso no servidor!');
-          setTimeout(() => setMensagem(''), 4000);
-        }
-      });
+  const handleMudarFoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const arquivo = e.target.files?.[0];
+    if (arquivo) {
+      const urlImagem = URL.createObjectURL(arquivo);
+      setFotoPerfil(urlImagem);
+    }
   };
 
-  if (carregando) return <div className="p-12 text-center font-bold text-slate-400">Carregando perfil...</div>;
-
   return (
-    <div className="p-8 md:p-12 animate-fade-in max-w-4xl mx-auto pb-20">
+    <div className="p-8 animate-fade-in max-w-5xl mx-auto pb-20">
+      
+      {/* Cabeçalho */}
       <div className="mb-8 border-b border-slate-200 pb-4">
-        <h1 className="text-3xl font-black text-slate-800">Meu Perfil e Dados</h1>
-        <p className="text-slate-500 mt-1">Gerencie suas informações pessoais sincronizadas com a base central.</p>
+        <h1 className="text-3xl font-black text-slate-800">Meu Perfil</h1>
+        <p className="text-slate-500 mt-2">
+          Visualize e gerencie suas informações pessoais, endereço e dados de saúde.
+        </p>
       </div>
 
-      {mensagem && (
-        <div className="mb-6 bg-emerald-50 text-emerald-700 border border-emerald-200 p-4 rounded-2xl text-sm font-bold flex items-center gap-2">
-          <CheckCircle2 size={18} /> {mensagem}
+      {/* Cartão Principal de Perfil */}
+      <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+        
+        {/* Banner vibrante no topo */}
+        <div className="h-32 bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 relative overflow-hidden">
+          <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
         </div>
-      )}
 
-      <form onSubmit={handleSalvar} className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Nome Completo</label>
+        <div className="px-8 pb-8 relative">
+          
+          {/* Avatar Flutuante com opção de clique para alterar a foto */}
+          <div className="absolute -top-12 left-8 group">
+            <label htmlFor="input-foto" className="cursor-pointer block relative">
+              
+              <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-lg border-4 border-white overflow-hidden relative">
+                {fotoPerfil ? (
+                  <img src={fotoPerfil} alt="Foto de Perfil" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-3xl font-black text-teal-600">
+                    {/* Pega a primeira letra do nome do usuário */}
+                    {usuario.nome !== 'Carregando...' ? usuario.nome.charAt(0) : 'JV'}
+                  </span>
+                )}
+
+                {/* Overlay escuro com ícone de câmera ao passar o mouse */}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white">
+                  <Camera size={24} />
+                  <span className="text-[10px] font-bold mt-0.5">Editar</span>
+                </div>
+              </div>
+
+            </label>
+
+            {/* Input de arquivo escondido que abre o explorador do computador */}
             <input 
-              type="text" 
-              value={perfil.nome || ''} 
-              onChange={(e) => setPerfil({ ...perfil, nome: e.target.value })}
-              className="w-full px-4 py-3 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-bold text-slate-700 focus:outline-none focus:border-teal-500" 
+              type="file" 
+              id="input-foto" 
+              accept="image/*" 
+              className="hidden" 
+              onChange={handleMudarFoto}
             />
           </div>
-          <div>
-            <label className="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">CPF</label>
-            <input 
-              type="text" 
-              value={perfil.cpf || ''} 
-              disabled 
-              className="w-full px-4 py-3 bg-slate-100 rounded-2xl border border-slate-200 text-sm font-bold text-slate-400 cursor-not-allowed" 
-            />
+
+          {/* Nome e Selo */}
+          <div className="pt-16 flex justify-between items-start mb-10">
+            <div>
+              {/* NOVO: Nome conectado ao banco */}
+              <h2 className="text-2xl font-bold text-slate-800">{usuario.nome}</h2>
+              <p className="text-slate-500 flex items-center gap-2 mt-1">
+                {/* NOVO: Cidade conectada ao banco */}
+                <MapPin size={16} /> {usuario.cidade}, RJ
+              </p>
+            </div>
+            <span className="bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-emerald-100">
+              <Shield size={14} /> Cadastro Validado (Gov.br)
+            </span>
           </div>
-          <div>
-            <label className="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Cartão Nacional de Saúde (CNS)</label>
-            <input 
-              type="text" 
-              value={perfil.cns || ''} 
-              disabled 
-              className="w-full px-4 py-3 bg-slate-100 rounded-2xl border border-slate-200 text-sm font-bold text-slate-400 cursor-not-allowed" 
-            />
+
+          {/* Grade de Informações */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 border-t border-slate-100 pt-8">
+            
+            {/* Coluna 1: Dados de Identificação */}
+            <div className="space-y-6">
+              <h3 className="text-sm font-bold text-slate-400 tracking-wider uppercase flex items-center gap-2">
+                <User size={16} /> Identificação
+              </h3>
+
+              <div>
+                <p className="text-sm text-slate-500">CPF</p>
+                <p className="font-medium text-slate-800 flex items-center gap-2">
+                  {/* NOVO: CPF conectado ao banco */}
+                  <CreditCard size={16} className="text-teal-500" /> {usuario.cpf}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm text-slate-500">Cartão Nacional de Saúde (CNS)</p>
+                <p className="font-medium text-slate-800 flex items-center gap-2">
+                  {/* NOVO: CNS conectado ao banco */}
+                  <Activity size={16} className="text-teal-500" /> {usuario.cns}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm text-slate-500">Data de Nascimento</p>
+                <p className="font-medium text-slate-800 flex items-center gap-2">
+                  <Calendar size={16} className="text-teal-500" /> 15/08/1998
+                </p>
+              </div>
+            </div>
+
+            {/* Coluna 2: Contato e Endereço */}
+            <div className="space-y-6">
+              <h3 className="text-sm font-bold text-slate-400 tracking-wider uppercase flex items-center gap-2">
+                <MapPin size={16} /> Contato e Endereço
+              </h3>
+
+              <div>
+                <p className="text-sm text-slate-500">E-mail</p>
+                <p className="font-medium text-slate-800 flex items-center gap-2">
+                  {/* NOVO: Email conectado ao banco */}
+                  <Mail size={16} className="text-teal-500" /> {usuario.email}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm text-slate-500">Telefone / WhatsApp</p>
+                <p className="font-medium text-slate-800 flex items-center gap-2">
+                  {/* NOVO: Telefone conectado ao banco */}
+                  <Phone size={16} className="text-teal-500" /> {usuario.telefone || 'Não informado'}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm text-slate-500">Endereço Residencial</p>
+                <p className="font-medium text-slate-800 flex items-start gap-2">
+                  <Home size={16} className="text-teal-500 shrink-0 mt-0.5" /> 
+                  <span className="leading-snug">
+                    Rua dos Bandeirantes, 123<br/>
+                    Centro, {usuario.cidade} - RJ<br/>
+                    CEP: 28990-000
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            {/* Coluna 3: Informações Médicas e Emergência */}
+            <div className="space-y-6">
+              <h3 className="text-sm font-bold text-slate-400 tracking-wider uppercase flex items-center gap-2">
+                <Heart size={16} /> Dados Clínicos
+              </h3>
+
+              <div>
+                <p className="text-sm text-slate-500">Tipo Sanguíneo</p>
+                <p className="font-black text-rose-600 text-lg">O+</p>
+              </div>
+
+              <div>
+                <p className="text-sm text-slate-500">Alergias Conhecidas</p>
+                <p className="font-medium text-slate-800">Nenhuma registrada</p>
+              </div>
+
+              <div className="bg-rose-50/50 p-4 rounded-2xl border border-rose-100 mt-2">
+                <p className="text-xs font-bold text-rose-800 uppercase tracking-wider mb-1">Contato de Emergência</p>
+                <p className="font-bold text-slate-800">Marcella</p>
+                <p className="text-sm text-slate-600">(22) 98888-8888</p>
+              </div>
+            </div>
+            
           </div>
-          <div>
-            <label className="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">E-mail</label>
-            <input 
-              type="email" 
-              value={perfil.email || ''} 
-              onChange={(e) => setPerfil({ ...perfil, email: e.target.value })}
-              className="w-full px-4 py-3 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-bold text-slate-700 focus:outline-none focus:border-teal-500" 
-            />
+
+          {/* Botão de Ação */}
+          <div className="mt-10 pt-6 border-t border-slate-100 flex justify-end">
+            <button 
+              onClick={() => alert("Solicitação de alteração enviada com sucesso!")}
+              className="bg-slate-100 text-slate-700 font-bold py-3 px-6 rounded-xl hover:bg-slate-200 transition-colors"
+            >
+              Solicitar Alteração de Dados
+            </button>
           </div>
-          <div>
-            <label className="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Telefone</label>
-            <input 
-              type="text" 
-              value={perfil.telefone || ''} 
-              onChange={(e) => setPerfil({ ...perfil, telefone: e.target.value })}
-              className="w-full px-4 py-3 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-bold text-slate-700 focus:outline-none focus:border-teal-500" 
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Cidade / UF</label>
-            <input 
-              type="text" 
-              value={perfil.cidade || ''} 
-              onChange={(e) => setPerfil({ ...perfil, cidade: e.target.value })}
-              className="w-full px-4 py-3 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-bold text-slate-700 focus:outline-none focus:border-teal-500" 
-            />
-          </div>
+
         </div>
-        <div className="pt-4 border-t border-slate-100 flex justify-end">
-          <button type="submit" className="bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-3 rounded-2xl transition-all shadow-lg shadow-teal-600/20 text-sm">
-            Salvar Alterações
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }

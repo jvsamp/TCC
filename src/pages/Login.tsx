@@ -1,12 +1,34 @@
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Lock } from 'lucide-react';
 
 export default function Login() {
+  const [cpf, setCpf] = useState('');
+  const [senha, setSenha] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault(); 
-    navigate('/dashboard');
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault(); // Evita recarregar a página
+    
+    try {
+      const response = await fetch('http://localhost:5000/api/usuarios/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cpf, senha })
+      });
+      
+      const data = await response.json();
+      
+      if (data.sucesso) {
+        // Salva o ID do usuário no navegador para as outras telas saberem quem está logado
+        localStorage.setItem('usuarioId', data.dados.id);
+        navigate('/historico'); // Manda para a tela inicial após logar
+      } else {
+        alert(data.mensagem); // Mostra erro de senha ou CPF
+      }
+    } catch (erro) {
+      alert("Erro ao conectar com o servidor.");
+    }
   };
 
   return (
@@ -50,11 +72,10 @@ export default function Login() {
           <div>
             <label htmlFor="cpf" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">CPF</label>
             <input 
-              type="text" 
-              id="cpf" 
-              placeholder="000.000.000-00" 
-              className="w-full border border-slate-200 rounded-2xl p-4 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all font-medium text-slate-700"
-              required
+             type="text" 
+            placeholder="Digite seu CPF"
+            value={cpf}
+            onChange={(e) => setCpf(e.target.value)}
             />
           </div>
 
@@ -62,10 +83,9 @@ export default function Login() {
             <label htmlFor="senha" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Senha</label>
             <input 
               type="password" 
-              id="senha" 
-              placeholder="••••••••" 
-              className="w-full border border-slate-200 rounded-2xl p-4 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all font-medium text-slate-700"
-              required
+              placeholder="Sua senha"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
             />
           </div>
 

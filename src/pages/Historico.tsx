@@ -13,32 +13,38 @@ interface Vacina {
 }
 
 export default function Historico() {
+  // Agora dizemos que o array de vacinas vai seguir o formato da interface Vacina
   const [vacinas, setVacinas] = useState<Vacina[]>([]);
-  const [carregando, setCarregando] = useState(true);
+  
+  // Variáveis que o seu visual (return) precisa para funcionar
   const [busca, setBusca] = useState('');
+  const [carregando, setCarregando] = useState(true);
 
-  // Busca os dados da API do Backend assim que a página carrega
   useEffect(() => {
-    fetch('http://localhost:5000/api/vacinas')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.sucesso) {
-          setVacinas(data.dados);
-        }
+    // Pega o ID de quem logou
+    const usuarioId = localStorage.getItem('usuarioId');
+    
+    if (usuarioId) {
+      fetch(`http://localhost:5000/api/vacinas/${usuarioId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.sucesso) setVacinas(data.dados);
+          setCarregando(false); // Para de girar o loading quando a resposta chega
+        })
+        .catch(erro => {
+          console.error(erro);
+          setCarregando(false);
+        });
+    } else {
         setCarregando(false);
-      })
-      .catch((err) => {
-        console.error("Erro ao buscar vacinas do backend:", err);
-        setCarregando(false);
-      });
+    }
   }, []);
 
-  // Filtra as vacinas com base na digitação da busca
-  const vacinasFiltradas = vacinas.filter((v) => 
-    v.nome.toLowerCase().includes(busca.toLowerCase()) ||
-    v.local.toLowerCase().includes(busca.toLowerCase())
+  // Recriando a lógica de filtro para a barra de pesquisa não quebrar
+  const vacinasFiltradas = vacinas.filter((vacina) =>
+    vacina.nome.toLowerCase().includes(busca.toLowerCase())
   );
-
+  
   return (
     <div className="p-8 md:p-12 animate-fade-in max-w-7xl mx-auto pb-20">
       

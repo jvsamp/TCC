@@ -1,21 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Bell, ShieldCheck, Calendar, CheckCircle } from 'lucide-react';
+import { Bell } from 'lucide-react';
 
 export default function Notificacoes() {
   const [notificacoes, setNotificacoes] = useState<any[]>([]);
-  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     fetch('http://localhost:5000/api/notificacoes')
-      .then((res) => res.json())
-      .then((data) => {
+      .then(res => res.json())
+      .then(data => {
         if (data.sucesso) setNotificacoes(data.dados);
-        setCarregando(false);
       });
   }, []);
-
-  if (carregando) return <div className="p-12 text-center font-bold text-slate-400">Carregando notificações...</div>;
-
+  
   return (
     <div className="p-8 md:p-12 animate-fade-in max-w-5xl mx-auto pb-20">
       <div className="mb-8 border-b border-slate-200 pb-4 flex justify-between items-end">

@@ -1,21 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Calendar, ArrowUpRight } from 'lucide-react';
-
 export default function Campanhas() {
   const [campanhas, setCampanhas] = useState<any[]>([]);
-  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     fetch('http://localhost:5000/api/campanhas')
-      .then((res) => res.json())
-      .then((data) => {
+      .then(res => res.json())
+      .then(data => {
         if (data.sucesso) setCampanhas(data.dados);
-        setCarregando(false);
-      });
+      })
+      .catch(erro => console.error("Erro ao carregar campanhas", erro));
   }, []);
-
-  if (carregando) return <div className="p-12 text-center font-bold text-slate-400">Carregando campanhas...</div>;
-
+  
   return (
     <div className="p-8 md:p-12 animate-fade-in max-w-5xl mx-auto pb-20">
       <div className="mb-8 border-b border-slate-200 pb-4">
