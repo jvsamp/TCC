@@ -1,21 +1,21 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Landing from './pages/Landing'; 
+import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Historico from './pages/Historico';
 import Perfil from './pages/Perfil';
 import Certificado from './pages/Certificado';
 import AdicionarDependente from './pages/AdicionarDependente';
+import Notificacoes from './pages/Notificacoes'; // <-- Nova importação
+import Campanhas from './pages/Campanhas';     // <-- Nova importação
+import Postos from './pages/Postos';             // <-- Nova importação
 import Layout from './components/Layout'; 
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* A raiz do site agora é a Landing Page */}
         <Route path="/" element={<Landing />} />
-        
-        {/* O Login mudou para cá */}
         <Route path="/login" element={<Login />} />
         
         <Route element={<Layout />}>
@@ -24,6 +24,9 @@ function App() {
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/certificado" element={<Certificado />} />
           <Route path="/adicionar-dependente" element={<AdicionarDependente />} />
+          <Route path="/notificacoes" element={<Notificacoes />} /> {/* Nova Rota */}
+          <Route path="/campanhas" element={<Campanhas />} />         {/* Nova Rota */}
+          <Route path="/postos" element={<Postos />} />                 {/* Nova Rota */}
         </Route>
       </Routes>
     </BrowserRouter>
