@@ -1,6 +1,20 @@
-import { User, Mail, Phone, MapPin, CreditCard, Shield, Calendar, Activity, Heart, Home } from 'lucide-react';
+import { useState } from 'react';
+import { User, Mail, Phone, MapPin, CreditCard, Shield, Calendar, Activity, Heart, Home, Camera } from 'lucide-react';
 
 export default function Perfil() {
+  // Estado para armazenar a foto de perfil (começa com null, usando as iniciais JV)
+  const [fotoPerfil, setFotoPerfil] = useState<string | null>(null);
+
+  // Função disparada quando o usuário seleciona uma imagem no computador
+  const handleMudarFoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const arquivo = e.target.files?.[0];
+    if (arquivo) {
+      // Cria uma URL temporária local para exibir a imagem escolhida na hora
+      const urlImagem = URL.createObjectURL(arquivo);
+      setFotoPerfil(urlImagem);
+    }
+  };
+
   return (
     <div className="p-8 animate-fade-in max-w-5xl mx-auto pb-20">
       
@@ -15,14 +29,41 @@ export default function Perfil() {
       {/* Cartão Principal de Perfil */}
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
         
-        {/* Banner azul no topo */}
-        <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-700"></div>
+        {/* Banner vibrante no topo */}
+        <div className="h-32 bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 relative overflow-hidden">
+          <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+        </div>
 
         <div className="px-8 pb-8 relative">
           
-          {/* Avatar Flutuante */}
-          <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-lg absolute -top-12 border-4 border-white">
-            <span className="text-3xl font-black text-blue-600">JV</span>
+          {/* Avatar Flutuante com opção de clique para alterar a foto */}
+          <div className="absolute -top-12 left-8 group">
+            <label htmlFor="input-foto" className="cursor-pointer block relative">
+              
+              <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-lg border-4 border-white overflow-hidden relative">
+                {fotoPerfil ? (
+                  <img src={fotoPerfil} alt="Foto de Perfil" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-3xl font-black text-teal-600">JV</span>
+                )}
+
+                {/* Overlay escuro com ícone de câmera ao passar o mouse */}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white">
+                  <Camera size={24} />
+                  <span className="text-[10px] font-bold mt-0.5">Editar</span>
+                </div>
+              </div>
+
+            </label>
+
+            {/* Input de arquivo escondido que abre o explorador do computador */}
+            <input 
+              type="file" 
+              id="input-foto" 
+              accept="image/*" 
+              className="hidden" 
+              onChange={handleMudarFoto}
+            />
           </div>
 
           {/* Nome e Selo */}
@@ -33,12 +74,12 @@ export default function Perfil() {
                 <MapPin size={16} /> Saquarema, RJ
               </p>
             </div>
-            <span className="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+            <span className="bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-emerald-100">
               <Shield size={14} /> Cadastro Validado (Gov.br)
             </span>
           </div>
 
-          {/* Grade de Informações (3 Colunas em telas grandes) */}
+          {/* Grade de Informações */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 border-t border-slate-100 pt-8">
             
             {/* Coluna 1: Dados de Identificação */}
@@ -50,21 +91,21 @@ export default function Perfil() {
               <div>
                 <p className="text-sm text-slate-500">CPF</p>
                 <p className="font-medium text-slate-800 flex items-center gap-2">
-                  <CreditCard size={16} className="text-blue-500" /> 123.456.789-00
+                  <CreditCard size={16} className="text-teal-500" /> 123.456.789-00
                 </p>
               </div>
 
               <div>
                 <p className="text-sm text-slate-500">Cartão Nacional de Saúde (CNS)</p>
                 <p className="font-medium text-slate-800 flex items-center gap-2">
-                  <Activity size={16} className="text-blue-500" /> 700 0000 0000 0000
+                  <Activity size={16} className="text-teal-500" /> 700 0000 0000 0000
                 </p>
               </div>
 
               <div>
                 <p className="text-sm text-slate-500">Data de Nascimento</p>
                 <p className="font-medium text-slate-800 flex items-center gap-2">
-                  <Calendar size={16} className="text-blue-500" /> 15/08/1998
+                  <Calendar size={16} className="text-teal-500" /> 15/08/1998
                 </p>
               </div>
             </div>
@@ -78,21 +119,21 @@ export default function Perfil() {
               <div>
                 <p className="text-sm text-slate-500">E-mail</p>
                 <p className="font-medium text-slate-800 flex items-center gap-2">
-                  <Mail size={16} className="text-blue-500" /> joaovictor@email.com
+                  <Mail size={16} className="text-teal-500" /> joaovictor@email.com
                 </p>
               </div>
 
               <div>
                 <p className="text-sm text-slate-500">Telefone / WhatsApp</p>
                 <p className="font-medium text-slate-800 flex items-center gap-2">
-                  <Phone size={16} className="text-blue-500" /> (22) 99999-9999
+                  <Phone size={16} className="text-teal-500" /> (22) 99999-9999
                 </p>
               </div>
 
               <div>
                 <p className="text-sm text-slate-500">Endereço Residencial</p>
                 <p className="font-medium text-slate-800 flex items-start gap-2">
-                  <Home size={16} className="text-blue-500 shrink-0 mt-0.5" /> 
+                  <Home size={16} className="text-teal-500 shrink-0 mt-0.5" /> 
                   <span className="leading-snug">
                     Rua dos Bandeirantes, 123<br/>
                     Centro, Saquarema - RJ<br/>
@@ -110,7 +151,7 @@ export default function Perfil() {
 
               <div>
                 <p className="text-sm text-slate-500">Tipo Sanguíneo</p>
-                <p className="font-black text-red-600 text-lg">O+</p>
+                <p className="font-black text-rose-600 text-lg">O+</p>
               </div>
 
               <div>
@@ -118,8 +159,8 @@ export default function Perfil() {
                 <p className="font-medium text-slate-800">Nenhuma registrada</p>
               </div>
 
-              <div className="bg-red-50 p-4 rounded-xl border border-red-100 mt-2">
-                <p className="text-xs font-bold text-red-800 uppercase tracking-wider mb-1">Contato de Emergência</p>
+              <div className="bg-rose-50/50 p-4 rounded-2xl border border-rose-100 mt-2">
+                <p className="text-xs font-bold text-rose-800 uppercase tracking-wider mb-1">Contato de Emergência</p>
                 <p className="font-bold text-slate-800">Marcella</p>
                 <p className="text-sm text-slate-600">(22) 98888-8888</p>
               </div>
@@ -129,7 +170,10 @@ export default function Perfil() {
 
           {/* Botão de Ação */}
           <div className="mt-10 pt-6 border-t border-slate-100 flex justify-end">
-            <button className="bg-slate-100 text-slate-700 font-bold py-3 px-6 rounded-xl hover:bg-slate-200 transition-colors">
+            <button 
+              onClick={() => alert("Solicitação de alteração enviada com sucesso!")}
+              className="bg-slate-100 text-slate-700 font-bold py-3 px-6 rounded-xl hover:bg-slate-200 transition-colors"
+            >
               Solicitar Alteração de Dados
             </button>
           </div>
