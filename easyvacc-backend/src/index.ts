@@ -3,12 +3,10 @@ import cors from 'cors';
 
 // Importando o modelo do Usuário que criamos no Sequelize
 import { Usuario } from './usuario';
-
-// (Em breve, você vai criar e importar os outros modelos aqui também)
-// import { Vacina } from './Vacina';
-// import { Posto } from './Posto';
-// import { Campanha } from './Campanha';
-// import { Notificacao } from './Notificacao';
+import { Vacina } from './vacina';
+import { Posto } from './postos';
+import { Campanha } from './campanha';
+import { Notificacao } from './notificacao';
 
 const app = express();
 app.use(cors());
@@ -60,18 +58,8 @@ app.get('/api/usuarios/:id', async (req, res) => {
     res.status(500).json({ sucesso: false, mensagem: "Erro ao buscar perfil." });
   }
 });
-
-// ==========================================
-// ROTAS DE VACINAS E OUTROS (Próximos passos)
-// ==========================================
-// Nota: Deixei estas rotas comentadas por enquanto.
-// Assim que você criar os arquivos Vacina.ts, Posto.ts, etc., 
-// basta descomentar e elas voltarão a funcionar normalmente!
-
-/*
 app.get('/api/vacinas/:usuarioId', async (req, res) => {
   try {
-    // Sequelize: usa .findAll()
     const vacinas = await Vacina.findAll({ where: { usuarioId: req.params.usuarioId } });
     res.json({ sucesso: true, dados: vacinas });
   } catch (error) {
@@ -114,7 +102,6 @@ app.get('/api/notificacoes', async (req, res) => {
     res.status(500).json({ sucesso: false, mensagem: "Erro ao buscar notificações." });
   }
 });
-*/
 
 const PORT = 5000;
 app.listen(PORT, () => {
