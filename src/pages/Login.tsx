@@ -69,25 +69,33 @@ export default function Login() {
         {/* Formulário */}
         <form onSubmit={handleLogin} className="space-y-5">
           
-          <div>
-            <label htmlFor="cpf" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">CPF</label>
-            <input 
-             type="text" 
-            placeholder="Digite seu CPF"
-            value={cpf}
-            onChange={(e) => setCpf(e.target.value)}
-            />
-          </div>
+          {/* Campo de CPF */}
+<div className="mb-4">
+  <label className="block text-sm font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+    CPF
+  </label>
+  <input
+    type="text"
+    placeholder="Digite seu CPF"
+    value={cpf} // Conecta à variável
+    onChange={(e) => setCpf(e.target.value)} // Atualiza a variável ao digitar
+    className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
+  />
+</div>
 
-          <div>
-            <label htmlFor="senha" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Senha</label>
-            <input 
-              type="password" 
-              placeholder="Sua senha"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-            />
-          </div>
+{/* Campo de Senha */}
+<div className="mb-6">
+  <label className="block text-sm font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+    Senha
+  </label>
+  <input
+    type="password"
+    placeholder="Sua senha"
+    value={senha} // Conecta à variável
+    onChange={(e) => setSenha(e.target.value)} // Atualiza a variável ao digitar
+    className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
+  />
+</div>
 
           <button 
             type="submit" 
