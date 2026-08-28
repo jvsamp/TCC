@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
-import sequelize from './database';
-import { Usuario } from './usuario'; // Importamos o usuário para criar a relação
+import { sequelize } from './database';
+import { Usuario } from './usuario';
 
 export const Vacina = sequelize.define('Vacina', {
   id: { 
@@ -28,9 +28,7 @@ export const Vacina = sequelize.define('Vacina', {
 });
 
 // Criando o Relacionamento (Chave Estrangeira)
-// 1 Usuário tem muitas Vacinas
 Usuario.hasMany(Vacina, { foreignKey: 'usuarioId' });
-// 1 Vacina pertence a 1 Usuário
 Vacina.belongsTo(Usuario, { foreignKey: 'usuarioId' });
 
 // Sincroniza com o banco e cria a tabela

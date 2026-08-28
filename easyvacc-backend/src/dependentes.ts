@@ -1,10 +1,5 @@
-import { DataTypes, Sequelize } from 'sequelize';
-
-const sequelize = new Sequelize('easyvacc', 'root', '', {
-  host: 'localhost',
-  dialect: 'mysql',
-  logging: false
-});
+import { DataTypes } from 'sequelize';
+import { sequelize } from './database';
 
 export const Dependente = sequelize.define('Dependente', {
   id: {

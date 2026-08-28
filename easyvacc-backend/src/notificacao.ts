@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from './database';
+import { sequelize } from './database';
 import { Usuario } from './usuario';
 
 export const Notificacao = sequelize.define('Notificacao', {

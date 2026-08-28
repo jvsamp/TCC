@@ -1,14 +1,23 @@
 import express from 'express';
 import cors from 'cors';
 import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
-// Conexão única centralizada do banco de dados no XAMPP
-export const sequelize = new Sequelize('easyvacc', 'root', '', {
-  host: 'localhost',
-  dialect: 'mysql',
-  logging: false
-});
+// Carrega as variáveis de ambiente (necessário para a nuvem)
+dotenv.config();
 
+// Conexão inteligente: usa a nuvem se configurada, ou o XAMPP local como padrão
+export const sequelize = new Sequelize(
+  process.env.DB_NAME || 'easyvacc',
+  process.env.DB_USER || 'root',
+  process.env.DB_PASS || '',
+  {
+    host: process.env.DB_HOST || 'localhost',
+    dialect: 'mysql',
+    port: Number(process.env.DB_PORT) || 3306,
+    logging: false
+  }
+);
 // Importando os modelos do Sequelize usando a mesma conexão
 import { Usuario } from './usuario';
 import { Vacina } from './vacina';

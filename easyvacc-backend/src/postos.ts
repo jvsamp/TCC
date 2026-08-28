@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from './database';
+import { sequelize } from './database';
 
 export const Posto = sequelize.define('Posto', {
   id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
