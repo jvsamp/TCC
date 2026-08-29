@@ -3,10 +3,10 @@ import cors from 'cors';
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
-// Carrega as variáveis de ambiente (necessário para a nuvem)
+// Carrega as variáveis de ambiente (Render/Aiven)
 dotenv.config();
 
-// Conexão inteligente: usa a nuvem se configurada, ou o XAMPP local como padrão
+// Conexão com o banco de dados
 export const sequelize = new Sequelize(
   process.env.DB_NAME || 'easyvacc',
   process.env.DB_USER || 'root',
@@ -18,7 +18,8 @@ export const sequelize = new Sequelize(
     logging: false
   }
 );
-// Importando os modelos do Sequelize usando a mesma conexão
+
+// Importando os modelos
 import { Usuario } from './usuario';
 import { Vacina } from './vacina';
 import { Posto } from './postos';
@@ -34,7 +35,6 @@ app.use(express.json());
 // ==========================================
 const popularDadosReais = async () => {
   try {
-    // 1. Inserir Postos de Saúde Reais em Saquarema, RJ
     const totalPostos = await Posto.count();
     if (totalPostos === 0) {
       await Posto.create({
@@ -58,7 +58,6 @@ const popularDadosReais = async () => {
       console.log("📍 Postos reais de Saquarema inseridos no banco!");
     }
 
-    // 2. Inserir Campanhas de Vacinação Reais
     const totalCampanhas = await Campanha.count();
     if (totalCampanhas === 0) {
       await Campanha.create({
@@ -83,7 +82,6 @@ const popularDadosReais = async () => {
 // ==========================================
 // ROTAS DE USUÁRIO E AUTENTICAÇÃO
 // ==========================================
-
 app.post('/api/usuarios/cadastro', async (req, res) => {
   try {
     const dados = req.body;
@@ -134,7 +132,6 @@ app.get('/api/usuarios/cpf/:cpf', async (req, res) => {
 // ==========================================
 // ROTAS DE VACINAS
 // ==========================================
-
 app.get('/api/vacinas/:usuarioId', async (req, res) => {
   try {
     const vacinas = await Vacina.findAll({ where: { usuarioId: req.params.usuarioId } });
@@ -156,7 +153,6 @@ app.post('/api/vacinas', async (req, res) => {
 // ==========================================
 // ROTAS DE POSTOS, CAMPANHAS E NOTIFICAÇÕES
 // ==========================================
-
 app.get('/api/postos', async (req, res) => {
   try {
     const postos = await Posto.findAll();
@@ -209,7 +205,6 @@ app.get('/api/notificacoes/:usuarioId', async (req, res) => {
 // ==========================================
 // ROTAS DE DEPENDENTES
 // ==========================================
-
 app.get('/api/dependentes/:usuarioId', async (req, res) => {
   try {
     const dependentes = await Dependente.findAll({ where: { usuarioId: req.params.usuarioId } });
@@ -240,16 +235,36 @@ app.post('/api/dependentes', async (req, res) => {
     res.status(400).json({ sucesso: false, mensagem: "Erro ao cadastrar dependente no banco de dados." });
   }
 });
-const PORT = 5000;
 
-// Sincroniza o banco de dados (forçando a criação correta da tabela dependentes) e inicia o servidor
-sequelize.sync({ force: true }).then(async () => {
-  console.log("📦 Banco de dados sincronizado e limpo com sucesso!");
-  await popularDadosReais();
-  
-  app.listen(PORT, () => {
-    console.log(`🚀 Servidor rodando com Sequelize na porta ${PORT}`);
-  });
-}).catch(err => {
-  console.error("Erro ao sincronizar com o banco de dados:", err);
-});
+// ==========================================
+// INICIALIZAÇÃO DO SERVIDOR E BANCO
+// ==========================================
+
+// O Render exige que a porta seja dinâmica
+const PORT = process.env.PORT || 5000;
+
+const iniciarServidor = async () => {
+  try {
+    // 1. Cria a tabela 'Usuarios' PRIMEIRO (pois ela é a referência das outras)
+    await Usuario.sync({ force: true });
+    
+    // 2. Cria as tabelas que dependem de Usuario (Chaves Estrangeiras)
+    await Dependente.sync({ force: true });
+    await Vacina.sync({ force: true });
+    
+    // 3. Cria as tabelas independentes
+    await Posto.sync({ force: true });
+    await Campanha.sync({ force: true });
+
+    console.log("📦 Banco de dados sincronizado na ordem correta!");
+    await popularDadosReais();
+    
+    app.listen(PORT, () => {
+      console.log(`🚀 Servidor rodando na porta ${PORT}`);
+    });
+  } catch (err) {
+    console.error("Erro ao sincronizar com o banco de dados:", err);
+  }
+};
+
+iniciarServidor();
