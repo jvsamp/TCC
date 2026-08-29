@@ -3,7 +3,7 @@ import cors from 'cors';
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
-// Carrega as variáveis de ambiente (Render/Aiven)
+// Carrega as variáveis de ambiente (Vercel/Aiven)
 dotenv.config();
 
 // Conexão com o banco de dados
@@ -33,6 +33,8 @@ app.use(express.json());
 // ==========================================
 // FUNÇÃO DE POPULAR DADOS REAIS (SEEDS)
 // ==========================================
+// Mantida no código caso precise rodar manualmente depois, 
+// mas não será ativada automaticamente para não estourar o Vercel.
 const popularDadosReais = async () => {
   try {
     const totalPostos = await Posto.count();
@@ -237,34 +239,13 @@ app.post('/api/dependentes', async (req, res) => {
 });
 
 // ==========================================
-// INICIALIZAÇÃO DO SERVIDOR E BANCO
+// INICIALIZAÇÃO PARA O VERCEL (SERVERLESS)
 // ==========================================
 
-// O Render exige que a porta seja dinâmica
-const PORT = process.env.PORT || 5000;
+// Testa a conexão de forma leve, sem recriar tabelas
+sequelize.authenticate()
+  .then(() => console.log("📦 Conectado ao banco Aiven com sucesso no Vercel!"))
+  .catch(err => console.error("Erro ao conectar no banco:", err));
 
-const iniciarServidor = async () => {
-  try {
-    // 1. Cria a tabela 'Usuarios' PRIMEIRO (pois ela é a referência das outras)
-    await Usuario.sync({ force: true });
-    
-    // 2. Cria as tabelas que dependem de Usuario (Chaves Estrangeiras)
-    await Dependente.sync({ force: true });
-    await Vacina.sync({ force: true });
-    
-    // 3. Cria as tabelas independentes
-    await Posto.sync({ force: true });
-    await Campanha.sync({ force: true });
-
-    console.log("📦 Banco de dados sincronizado na ordem correta!");
-    await popularDadosReais();
-    
-    app.listen(PORT, () => {
-      console.log(`🚀 Servidor rodando na porta ${PORT}`);
-    });
-  } catch (err) {
-    console.error("Erro ao sincronizar com o banco de dados:", err);
-  }
-};
-
-iniciarServidor();
+// O Vercel exige que o app seja exportado
+export default app;
