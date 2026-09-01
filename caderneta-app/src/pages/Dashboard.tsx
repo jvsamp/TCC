@@ -1,126 +1,1008 @@
-import { ShieldCheck, FileText, User, PlusCircle, CheckCircle2, ArrowUpRight, Activity } from 'lucide-react';
+import {
+  ShieldCheck,
+  FileText,
+  User,
+  PlusCircle,
+  CheckCircle2,
+  ArrowUpRight,
+  Activity,
+  Syringe,
+  CalendarDays,
+  Sparkles,
+  HeartPulse,
+} from 'lucide-react';
+
 import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
   return (
-    <div className="p-8 md:p-12 animate-fade-in max-w-7xl mx-auto pb-20">
-      
-      {/* Cabeçalho de Boas-Vindas com Banner Moderno */}
-      <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 rounded-[2.5rem] p-8 md:p-10 text-white shadow-xl shadow-teal-900/10 relative overflow-hidden mb-10">
-        
-        {/* Detalhes decorativos de fundo */}
-        <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl"></div>
-        <div className="absolute left-1/3 top-0 w-32 h-32 bg-emerald-400/20 rounded-full blur-xl"></div>
+    /*
+      ==========================================================
+      DASHBOARD EASYVACC
+      ==========================================================
+      Fundo escuro + gradientes + transparência + animações.
+      Toda a parte funcional continua usando as mesmas rotas.
+    */
+    <div className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
 
-        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div>
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold mb-4 border border-white/20">
-              <Activity size={14} /> Sistema Integrado SUS
-            </div>
-            <h1 className="text-3xl md:text-4xl font-black tracking-tight">
-              Olá, João Victor 👋
-            </h1>
-            <p className="text-teal-50 mt-2 text-sm md:text-base font-medium max-w-xl">
-              Sua caderneta de vacinação está atualizada. Gerencie suas doses, emita certificados ou visualize seus dependentes por aqui.
-            </p>
-          </div>
+      {/* ======================================================
+          LUZES DECORATIVAS DO FUNDO
+          São círculos desfocados que criam o efeito de luz.
+         ====================================================== */}
 
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 px-5 py-4 rounded-2xl flex items-center gap-4">
-            <div className="w-12 h-12 bg-white text-teal-600 rounded-xl flex items-center justify-center font-black shadow-sm">
-              <ShieldCheck size={28} />
-            </div>
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+
+        <div
+          className="
+            absolute -top-40 -left-40
+            h-[500px] w-[500px]
+            rounded-full
+            bg-emerald-500/20
+            blur-[120px]
+            animate-pulse
+          "
+        />
+
+        <div
+          className="
+            absolute top-1/3 -right-40
+            h-[550px] w-[550px]
+            rounded-full
+            bg-cyan-500/20
+            blur-[140px]
+            animate-pulse
+          "
+        />
+
+        <div
+          className="
+            absolute bottom-0 left-1/3
+            h-[400px] w-[400px]
+            rounded-full
+            bg-teal-500/10
+            blur-[120px]
+          "
+        />
+
+      </div>
+
+
+      {/* ======================================================
+          CONTEÚDO PRINCIPAL
+         ====================================================== */}
+
+      <div
+        className="
+          relative z-10
+          mx-auto max-w-7xl
+          p-6 md:p-12
+          pb-20
+          animate-fade-in
+        "
+      >
+
+        {/* ====================================================
+            BANNER PRINCIPAL
+           ==================================================== */}
+
+        <div
+          className="
+            relative
+            overflow-hidden
+            rounded-[2.5rem]
+            border border-white/10
+            bg-gradient-to-br
+            from-emerald-500/30
+            via-teal-500/20
+            to-cyan-500/20
+            p-8 md:p-10
+            shadow-2xl
+            shadow-cyan-950/40
+            backdrop-blur-xl
+            mb-8
+          "
+        >
+
+          {/* Luz interna do banner */}
+
+          <div
+            className="
+              absolute -right-20 -top-20
+              h-72 w-72
+              rounded-full
+              bg-cyan-400/20
+              blur-3xl
+              animate-pulse
+            "
+          />
+
+          <div
+            className="
+              absolute -bottom-32 left-1/3
+              h-72 w-72
+              rounded-full
+              bg-emerald-400/20
+              blur-3xl
+            "
+          />
+
+
+          <div
+            className="
+              relative z-10
+              flex flex-col
+              md:flex-row
+              justify-between
+              items-start
+              md:items-center
+              gap-8
+            "
+          >
+
+            {/* LADO ESQUERDO */}
+
             <div>
-              <p className="text-xs text-teal-100 font-bold uppercase tracking-wider">Status Geral</p>
-              <p className="text-sm font-black text-white">Protegido (100%)</p>
+
+              <div
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  rounded-full
+                  border border-emerald-300/20
+                  bg-emerald-400/10
+                  px-4 py-2
+                  text-xs
+                  font-bold
+                  text-emerald-200
+                  backdrop-blur-xl
+                  mb-5
+                "
+              >
+                <Activity size={14} />
+
+                Sistema Integrado SUS
+
+                <span className="relative flex h-2 w-2">
+
+                  <span
+                    className="
+                      absolute inline-flex
+                      h-full w-full
+                      animate-ping
+                      rounded-full
+                      bg-emerald-400
+                      opacity-75
+                    "
+                  />
+
+                  <span
+                    className="
+                      relative inline-flex
+                      h-2 w-2
+                      rounded-full
+                      bg-emerald-400
+                    "
+                  />
+
+                </span>
+
+              </div>
+
+
+              <h1
+                className="
+                  text-4xl
+                  md:text-5xl
+                  font-black
+                  tracking-tight
+                "
+              >
+                Olá, João Victor
+                <span className="inline-block ml-3 animate-bounce">
+                  👋
+                </span>
+              </h1>
+
+
+              <p
+                className="
+                  mt-4
+                  max-w-2xl
+                  text-sm
+                  md:text-base
+                  leading-relaxed
+                  text-slate-300
+                "
+              >
+                Sua saúde em um só lugar. Acompanhe sua vacinação,
+                consulte seu histórico e mantenha sua proteção sempre
+                atualizada.
+              </p>
+
+
+              {/* BOTÕES DO BANNER */}
+
+              <div className="mt-7 flex flex-wrap gap-3">
+
+                <Link
+                  to="/historico"
+                  className="
+                    flex items-center gap-2
+                    rounded-xl
+                    bg-emerald-400
+                    px-5 py-3
+                    text-sm font-black
+                    text-slate-950
+                    shadow-lg
+                    shadow-emerald-500/20
+                    transition-all
+                    duration-300
+                    hover:-translate-y-1
+                    hover:bg-emerald-300
+                    hover:shadow-emerald-400/30
+                  "
+                >
+                  <Syringe size={18} />
+
+                  Minhas Vacinas
+                </Link>
+
+
+                <Link
+                  to="/certificado"
+                  className="
+                    flex items-center gap-2
+                    rounded-xl
+                    border border-white/10
+                    bg-white/5
+                    px-5 py-3
+                    text-sm font-bold
+                    text-white
+                    backdrop-blur-xl
+                    transition-all
+                    duration-300
+                    hover:-translate-y-1
+                    hover:bg-white/10
+                  "
+                >
+                  <FileText size={18} />
+
+                  Certificado
+                </Link>
+
+              </div>
+
             </div>
+
+
+            {/* STATUS DE PROTEÇÃO */}
+
+            <div
+              className="
+                group
+                min-w-[230px]
+                rounded-[2rem]
+                border border-white/10
+                bg-white/5
+                p-6
+                backdrop-blur-xl
+                transition-all
+                duration-500
+                hover:-translate-y-2
+                hover:bg-white/10
+              "
+            >
+
+              <div className="flex items-center gap-4">
+
+                <div
+                  className="
+                    flex h-14 w-14
+                    items-center justify-center
+                    rounded-2xl
+                    bg-emerald-400
+                    text-slate-950
+                    shadow-lg
+                    shadow-emerald-500/20
+                    transition-transform
+                    duration-500
+                    group-hover:rotate-6
+                    group-hover:scale-110
+                  "
+                >
+                  <ShieldCheck size={30} />
+                </div>
+
+
+                <div>
+
+                  <p
+                    className="
+                      text-[10px]
+                      font-black
+                      uppercase
+                      tracking-[0.2em]
+                      text-slate-400
+                    "
+                  >
+                    Status Geral
+                  </p>
+
+                  <p className="mt-1 text-lg font-black text-white">
+                    Protegido
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              {/* BARRA DE PROGRESSO */}
+
+              <div className="mt-6">
+
+                <div
+                  className="
+                    mb-2
+                    flex
+                    justify-between
+                    text-xs
+                    font-bold
+                  "
+                >
+                  <span className="text-slate-400">
+                    Cobertura vacinal
+                  </span>
+
+                  <span className="text-emerald-300">
+                    100%
+                  </span>
+                </div>
+
+
+                <div
+                  className="
+                    h-2
+                    overflow-hidden
+                    rounded-full
+                    bg-white/10
+                  "
+                >
+                  <div
+                    className="
+                      h-full
+                      w-full
+                      rounded-full
+                      bg-gradient-to-r
+                      from-emerald-400
+                      to-cyan-400
+                      shadow-lg
+                      shadow-emerald-400/30
+                    "
+                  />
+                </div>
+
+              </div>
+
+            </div>
+
           </div>
+
         </div>
-      </div>
 
-      {/* Grid de Atalhos / Funcionalidades */}
-      <h2 className="text-lg font-black text-slate-800 mb-6 flex items-center gap-2">
-        Acesso Rápido
-      </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        
-        {/* Card 1: Minhas Vacinas */}
-        <Link 
-          to="/historico" 
-          className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200 hover:border-teal-500 hover:shadow-xl hover:shadow-teal-900/5 transition-all group flex flex-col justify-between"
-        >
-          <div>
-            <div className="w-14 h-14 bg-teal-50 text-teal-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <ShieldCheck size={28} />
+        {/* ====================================================
+            MINI CARDS DE STATUS
+           ==================================================== */}
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+
+          {/* VACINAS */}
+
+          <div
+            className="
+              group
+              rounded-2xl
+              border border-white/10
+              bg-white/[0.04]
+              p-5
+              backdrop-blur-xl
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:border-emerald-400/30
+              hover:bg-emerald-400/10
+            "
+          >
+            <div className="flex items-center gap-4">
+
+              <div
+                className="
+                  flex h-11 w-11
+                  items-center justify-center
+                  rounded-xl
+                  bg-emerald-400/10
+                  text-emerald-300
+                "
+              >
+                <Syringe size={22} />
+              </div>
+
+              <div>
+                <p className="text-2xl font-black">
+                  100%
+                </p>
+
+                <p className="text-xs font-semibold text-slate-400">
+                  Vacinação em dia
+                </p>
+              </div>
+
             </div>
-            <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-teal-600 transition-colors">Minhas Vacinas</h3>
-            <p className="text-slate-500 text-sm leading-relaxed">
-              Consulte seu histórico completo de imunização, datas de aplicação e próximas doses.
-            </p>
           </div>
-          <div className="mt-6 flex items-center gap-1 text-teal-600 font-bold text-sm">
-            <span>Acessar histórico</span> <ArrowUpRight size={16} />
-          </div>
-        </Link>
 
-        {/* Card 2: Emitir Certificado */}
-        <Link 
-          to="/certificado" 
-          className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200 hover:border-teal-500 hover:shadow-xl hover:shadow-teal-900/5 transition-all group flex flex-col justify-between"
-        >
-          <div>
-            <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <FileText size={28} />
+
+          {/* STATUS */}
+
+          <div
+            className="
+              group
+              rounded-2xl
+              border border-white/10
+              bg-white/[0.04]
+              p-5
+              backdrop-blur-xl
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:border-cyan-400/30
+              hover:bg-cyan-400/10
+            "
+          >
+            <div className="flex items-center gap-4">
+
+              <div
+                className="
+                  flex h-11 w-11
+                  items-center justify-center
+                  rounded-xl
+                  bg-cyan-400/10
+                  text-cyan-300
+                "
+              >
+                <HeartPulse size={22} />
+              </div>
+
+              <div>
+                <p className="text-2xl font-black">
+                  Protegido
+                </p>
+
+                <p className="text-xs font-semibold text-slate-400">
+                  Status de imunização
+                </p>
+              </div>
+
             </div>
-            <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-emerald-600 transition-colors">Certificado Nacional</h3>
-            <p className="text-slate-500 text-sm leading-relaxed">
-              Gere seu comprovante oficial de vacinação em PDF com QR Code de validação.
-            </p>
           </div>
-          <div className="mt-6 flex items-center gap-1 text-emerald-600 font-bold text-sm">
-            <span>Emitir PDF</span> <ArrowUpRight size={16} />
-          </div>
-        </Link>
 
-        {/* Card 3: Meu Perfil */}
-        <Link 
-          to="/perfil" 
-          className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200 hover:border-teal-500 hover:shadow-xl hover:shadow-teal-900/5 transition-all group flex flex-col justify-between"
-        >
-          <div>
-            <div className="w-14 h-14 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <User size={28} />
+
+          {/* PRÓXIMA DOSE */}
+
+          <div
+            className="
+              group
+              rounded-2xl
+              border border-white/10
+              bg-white/[0.04]
+              p-5
+              backdrop-blur-xl
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:border-teal-400/30
+              hover:bg-teal-400/10
+            "
+          >
+            <div className="flex items-center gap-4">
+
+              <div
+                className="
+                  flex h-11 w-11
+                  items-center justify-center
+                  rounded-xl
+                  bg-teal-400/10
+                  text-teal-300
+                "
+              >
+                <CalendarDays size={22} />
+              </div>
+
+              <div>
+                <p className="text-lg font-black">
+                  Em dia
+                </p>
+
+                <p className="text-xs font-semibold text-slate-400">
+                  Nenhuma dose pendente
+                </p>
+              </div>
+
             </div>
-            <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-cyan-600 transition-colors">Meu Perfil e Dados</h3>
-            <p className="text-slate-500 text-sm leading-relaxed">
-              Visualize suas informações cadastrais, endereço, tipo sanguíneo e contato de emergência.
-            </p>
           </div>
-          <div className="mt-6 flex items-center gap-1 text-cyan-600 font-bold text-sm">
-            <span>Gerenciar dados</span> <ArrowUpRight size={16} />
-          </div>
-        </Link>
 
-      </div>
-
-      {/* Seção Inferior: Rodapé Informativo */}
-      <div className="bg-white/80 backdrop-blur-md border border-slate-200 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold shrink-0">
-            <CheckCircle2 size={20} />
-          </div>
-          <p className="text-sm text-slate-600 font-medium">
-            Precisa cadastrar um dependente (filho ou familiar)? Utilize o botão no menu lateral esquerdo.
-          </p>
         </div>
-        <Link 
-          to="/adicionar-dependente" 
-          className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-5 py-3 rounded-xl transition-colors flex items-center gap-2 shrink-0"
-        >
-          <PlusCircle size={16} /> Adicionar Dependente
-        </Link>
-      </div>
 
+
+        {/* ====================================================
+            TÍTULO ACESSO RÁPIDO
+           ==================================================== */}
+
+        <div className="mb-6 flex items-center gap-3">
+
+          <div
+            className="
+              flex h-9 w-9
+              items-center justify-center
+              rounded-xl
+              bg-emerald-400/10
+              text-emerald-300
+            "
+          >
+            <Sparkles size={18} />
+          </div>
+
+          <div>
+            <h2 className="text-xl font-black">
+              Acesso Rápido
+            </h2>
+
+            <p className="text-xs text-slate-500">
+              Tudo que você precisa em poucos cliques
+            </p>
+          </div>
+
+        </div>
+
+
+        {/* ====================================================
+            CARDS PRINCIPAIS
+           ==================================================== */}
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+
+          {/* ==================================================
+              CARD 1 - MINHAS VACINAS
+             ================================================== */}
+
+          <Link
+            to="/historico"
+            className="
+              group
+              relative
+              overflow-hidden
+              rounded-[2rem]
+              border border-white/10
+              bg-gradient-to-br
+              from-emerald-500/10
+              to-white/[0.03]
+              p-8
+              backdrop-blur-xl
+              transition-all
+              duration-500
+              hover:-translate-y-2
+              hover:border-emerald-400/30
+              hover:shadow-2xl
+              hover:shadow-emerald-950/30
+            "
+          >
+
+            {/* Luz que aparece no hover */}
+
+            <div
+              className="
+                absolute
+                -right-20
+                -top-20
+                h-48 w-48
+                rounded-full
+                bg-emerald-400/0
+                blur-3xl
+                transition-all
+                duration-500
+                group-hover:bg-emerald-400/20
+              "
+            />
+
+
+            <div className="relative z-10">
+
+              <div
+                className="
+                  mb-7
+                  flex h-14 w-14
+                  items-center justify-center
+                  rounded-2xl
+                  bg-emerald-400/10
+                  text-emerald-300
+                  transition-all
+                  duration-500
+                  group-hover:rotate-6
+                  group-hover:scale-110
+                  group-hover:bg-emerald-400
+                  group-hover:text-slate-950
+                "
+              >
+                <ShieldCheck size={28} />
+              </div>
+
+
+              <h3
+                className="
+                  mb-3
+                  text-xl
+                  font-black
+                  text-white
+                "
+              >
+                Minhas Vacinas
+              </h3>
+
+
+              <p
+                className="
+                  min-h-[72px]
+                  text-sm
+                  leading-relaxed
+                  text-slate-400
+                "
+              >
+                Consulte seu histórico completo de imunização,
+                datas de aplicação e próximas doses.
+              </p>
+
+
+              <div
+                className="
+                  mt-7
+                  flex
+                  items-center
+                  gap-2
+                  text-sm
+                  font-black
+                  text-emerald-300
+                "
+              >
+                Acessar histórico
+
+                <ArrowUpRight
+                  size={17}
+                  className="
+                    transition-transform
+                    duration-300
+                    group-hover:translate-x-1
+                    group-hover:-translate-y-1
+                  "
+                />
+
+              </div>
+
+            </div>
+
+          </Link>
+
+
+          {/* ==================================================
+              CARD 2 - CERTIFICADO
+             ================================================== */}
+
+          <Link
+            to="/certificado"
+            className="
+              group
+              relative
+              overflow-hidden
+              rounded-[2rem]
+              border border-white/10
+              bg-gradient-to-br
+              from-teal-500/10
+              to-white/[0.03]
+              p-8
+              backdrop-blur-xl
+              transition-all
+              duration-500
+              hover:-translate-y-2
+              hover:border-teal-400/30
+              hover:shadow-2xl
+              hover:shadow-teal-950/30
+            "
+          >
+
+            <div
+              className="
+                absolute
+                -right-20
+                -top-20
+                h-48 w-48
+                rounded-full
+                bg-teal-400/0
+                blur-3xl
+                transition-all
+                duration-500
+                group-hover:bg-teal-400/20
+              "
+            />
+
+
+            <div className="relative z-10">
+
+              <div
+                className="
+                  mb-7
+                  flex h-14 w-14
+                  items-center justify-center
+                  rounded-2xl
+                  bg-teal-400/10
+                  text-teal-300
+                  transition-all
+                  duration-500
+                  group-hover:-rotate-6
+                  group-hover:scale-110
+                  group-hover:bg-teal-400
+                  group-hover:text-slate-950
+                "
+              >
+                <FileText size={28} />
+              </div>
+
+
+              <h3 className="mb-3 text-xl font-black text-white">
+                Certificado Nacional
+              </h3>
+
+
+              <p
+                className="
+                  min-h-[72px]
+                  text-sm
+                  leading-relaxed
+                  text-slate-400
+                "
+              >
+                Gere seu comprovante oficial de vacinação
+                em PDF com QR Code de validação.
+              </p>
+
+
+              <div
+                className="
+                  mt-7
+                  flex
+                  items-center
+                  gap-2
+                  text-sm
+                  font-black
+                  text-teal-300
+                "
+              >
+                Emitir PDF
+
+                <ArrowUpRight
+                  size={17}
+                  className="
+                    transition-transform
+                    duration-300
+                    group-hover:translate-x-1
+                    group-hover:-translate-y-1
+                  "
+                />
+
+              </div>
+
+            </div>
+
+          </Link>
+
+
+          {/* ==================================================
+              CARD 3 - PERFIL
+             ================================================== */}
+
+          <Link
+            to="/perfil"
+            className="
+              group
+              relative
+              overflow-hidden
+              rounded-[2rem]
+              border border-white/10
+              bg-gradient-to-br
+              from-cyan-500/10
+              to-white/[0.03]
+              p-8
+              backdrop-blur-xl
+              transition-all
+              duration-500
+              hover:-translate-y-2
+              hover:border-cyan-400/30
+              hover:shadow-2xl
+              hover:shadow-cyan-950/30
+            "
+          >
+
+            <div
+              className="
+                absolute
+                -right-20
+                -top-20
+                h-48 w-48
+                rounded-full
+                bg-cyan-400/0
+                blur-3xl
+                transition-all
+                duration-500
+                group-hover:bg-cyan-400/20
+              "
+            />
+
+
+            <div className="relative z-10">
+
+              <div
+                className="
+                  mb-7
+                  flex h-14 w-14
+                  items-center justify-center
+                  rounded-2xl
+                  bg-cyan-400/10
+                  text-cyan-300
+                  transition-all
+                  duration-500
+                  group-hover:rotate-6
+                  group-hover:scale-110
+                  group-hover:bg-cyan-400
+                  group-hover:text-slate-950
+                "
+              >
+                <User size={28} />
+              </div>
+
+
+              <h3 className="mb-3 text-xl font-black text-white">
+                Meu Perfil e Dados
+              </h3>
+
+
+              <p
+                className="
+                  min-h-[72px]
+                  text-sm
+                  leading-relaxed
+                  text-slate-400
+                "
+              >
+                Visualize suas informações cadastrais,
+                endereço, tipo sanguíneo e contato de emergência.
+              </p>
+
+
+              <div
+                className="
+                  mt-7
+                  flex
+                  items-center
+                  gap-2
+                  text-sm
+                  font-black
+                  text-cyan-300
+                "
+              >
+                Gerenciar dados
+
+                <ArrowUpRight
+                  size={17}
+                  className="
+                    transition-transform
+                    duration-300
+                    group-hover:translate-x-1
+                    group-hover:-translate-y-1
+                  "
+                />
+
+              </div>
+
+            </div>
+
+          </Link>
+
+        </div>
+
+
+        {/* ====================================================
+            DEPENDENTES
+           ==================================================== */}
+
+        <div
+          className="
+            flex
+            flex-col
+            md:flex-row
+            items-center
+            justify-between
+            gap-5
+            rounded-[2rem]
+            border border-white/10
+            bg-gradient-to-r
+            from-white/[0.05]
+            to-emerald-400/[0.05]
+            p-6
+            backdrop-blur-xl
+          "
+        >
+
+          <div className="flex items-center gap-4">
+
+            <div
+              className="
+                flex h-12 w-12
+                shrink-0
+                items-center justify-center
+                rounded-2xl
+                bg-emerald-400/10
+                text-emerald-300
+              "
+            >
+              <CheckCircle2 size={23} />
+            </div>
+
+
+            <div>
+
+              <p className="font-bold text-white">
+                Gerencie também sua família
+              </p>
+
+              <p className="mt-1 text-sm text-slate-400">
+                Cadastre filhos ou familiares como dependentes
+                e acompanhe a vacinação deles.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <Link
+            to="/adicionar-dependente"
+            className="
+              flex
+              shrink-0
+              items-center
+              gap-2
+              rounded-xl
+              border border-emerald-400/20
+              bg-emerald-400/10
+              px-5 py-3
+              text-xs
+              font-black
+              text-emerald-300
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:bg-emerald-400
+              hover:text-slate-950
+            "
+          >
+            <PlusCircle size={17} />
+
+            Adicionar Dependente
+          </Link>
+
+        </div>
+
+      </div>
     </div>
   );
 }
