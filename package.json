@@ -1,0 +1,8 @@
+{
+  "name": "tcc",
+  "private": true,
+  "scripts": {
+    "build": "npm install --prefix easyvacc-backend && npm run build --prefix easyvacc-backend",
+    "start": "npm start --prefix easyvacc-backend"
+  }
+}
