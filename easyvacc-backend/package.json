@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
+"scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js",
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "vercel-build": "tsc"
+    "dev": "tsx watch src/index.ts"
   },
   "keywords": [],
   "author": "",
