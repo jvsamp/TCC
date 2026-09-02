@@ -18,7 +18,6 @@ import {
   MapPin,
   PanelLeftClose,
   PanelLeftOpen,
-  UsersRound,
   ChevronRight,
 } from 'lucide-react';
 
