@@ -1,162 +1,1157 @@
-import { useState, useEffect } from 'react';
-import { Link, Outlet } from 'react-router-dom';
-import { Home, ShieldCheck, FileText, User, LogOut, PlusCircle, Bell, Calendar, MapPin, Menu, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+import {
+  NavLink,
+  Outlet,
+  Link,
+} from 'react-router-dom';
+
+import {
+  LayoutDashboard,
+  Syringe,
+  FileText,
+  UserRound,
+  LogOut,
+  UserPlus,
+  Bell,
+  CalendarDays,
+  MapPin,
+  PanelLeftClose,
+  PanelLeftOpen,
+  UsersRound,
+  ChevronRight,
+} from 'lucide-react';
+
+
+/*
+  ============================================================
+  LAYOUT PRINCIPAL - EASYVACC
+  ============================================================
+
+  Este componente controla:
+
+  - Sidebar
+  - Navegação
+  - Dependentes
+  - Notificações
+  - Área principal das páginas
+
+  NOVA IDENTIDADE:
+
+  - Azul-marinho institucional
+  - Fundo principal claro
+  - Verde somente para destaque
+  - Menos efeitos decorativos
+  - Navegação com página ativa
+  - Aparência de sistema profissional
+*/
+
 
 export default function Layout() {
+
+  // ==========================================================
+  // SIDEBAR
+  // ==========================================================
+
   const [isOpen, setIsOpen] = useState(true);
+
+
+  // ==========================================================
+  // DADOS
+  // ==========================================================
+
   const [dependentes, setDependentes] = useState<any[]>([]);
-  const [notificacoesNaoLidas, setNotificacoesNaoLidas] = useState(0);
 
-  // Buscar dependentes e notificações dinamicamente
+  const [notificacoesNaoLidas, setNotificacoesNaoLidas] =
+    useState(0);
+
+
+  // ==========================================================
+  // API
+  // ==========================================================
+
+  const API_URL =
+    import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+
+  // ==========================================================
+  // CARREGAMENTO DOS DADOS
+  // ==========================================================
+
   useEffect(() => {
-    const usuarioId = localStorage.getItem('usuarioId');
-    if (usuarioId) {
-      // Puxar Dependentes
-      fetch(`http://localhost:5000/api/dependentes/${usuarioId}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.sucesso) setDependentes(data.dados);
-        })
-        .catch(err => console.error("Erro ao buscar dependentes:", err));
 
-      // Puxar Notificações (contar apenas as não lidas)
-      fetch(`http://localhost:5000/api/notificacoes/${usuarioId}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.sucesso) {
-            const qtdNaoLidas = data.dados.filter((notif: any) => notif.lida === false).length;
-            setNotificacoesNaoLidas(qtdNaoLidas);
-          }
-        })
-        .catch(err => console.error("Erro ao buscar notificações:", err));
+    const usuarioId = localStorage.getItem('usuarioId');
+
+    if (!usuarioId) {
+      return;
     }
-  }, []);
+
+
+    // --------------------------------------------------------
+    // DEPENDENTES
+    // --------------------------------------------------------
+
+    fetch(`${API_URL}/api/dependentes/${usuarioId}`)
+
+      .then((res) => res.json())
+
+      .then((data) => {
+
+        if (data.sucesso) {
+          setDependentes(data.dados);
+        }
+
+      })
+
+      .catch((erro) => {
+        console.error(
+          'Erro ao buscar dependentes:',
+          erro
+        );
+      });
+
+
+    // --------------------------------------------------------
+    // NOTIFICAÇÕES
+    // --------------------------------------------------------
+
+    fetch(`${API_URL}/api/notificacoes/${usuarioId}`)
+
+      .then((res) => res.json())
+
+      .then((data) => {
+
+        if (data.sucesso) {
+
+          const quantidadeNaoLidas =
+            data.dados.filter(
+              (notificacao: any) =>
+                notificacao.lida === false
+            ).length;
+
+          setNotificacoesNaoLidas(
+            quantidadeNaoLidas
+          );
+
+        }
+
+      })
+
+      .catch((erro) => {
+        console.error(
+          'Erro ao buscar notificações:',
+          erro
+        );
+      });
+
+  }, [API_URL]);
+
+
+  // ==========================================================
+  // ESTILO DOS LINKS
+  // ==========================================================
+
+  /*
+    NavLink informa automaticamente se a rota está ativa.
+
+    Assim conseguimos destacar a página atual no menu.
+  */
+
+  const estiloLink = ({
+    isActive,
+  }: {
+    isActive: boolean;
+  }) => `
+
+    relative
+
+    flex
+    items-center
+
+    ${isOpen ? 'gap-3 px-3' : 'justify-center px-0'}
+
+    h-10
+
+    rounded-md
+
+    text-[13px]
+    font-medium
+
+    transition-colors
+    duration-150
+
+    ${
+      isActive
+        ? `
+          bg-white/10
+          text-white
+        `
+        : `
+          text-slate-400
+          hover:bg-white/[0.06]
+          hover:text-slate-100
+        `
+    }
+
+  `;
+
+
+  // ==========================================================
+  // INTERFACE
+  // ==========================================================
 
   return (
-    <div className="flex h-screen bg-slate-50/50 font-sans text-slate-800 overflow-hidden">
-      
-      <aside className={`bg-white shadow-[4px_0_24px_rgba(0,0,0,0.02)] flex flex-col print:hidden z-10 transition-all duration-300 ease-in-out ${isOpen ? 'w-72' : 'w-24'}`}>
-        
-        <div className="p-6 flex items-center justify-between border-b border-slate-50">
+
+    <div
+      className="
+        flex
+        h-screen
+        overflow-hidden
+
+        bg-slate-50
+
+        font-sans
+        text-slate-900
+      "
+    >
+
+
+      {/* ======================================================
+          SIDEBAR
+         ====================================================== */}
+
+      <aside
+        className={`
+          relative
+          z-30
+
+          flex
+          shrink-0
+          flex-col
+
+          border-r
+          border-[#18344d]
+
+          bg-[#0b2239]
+
+          text-white
+
+          transition-[width]
+          duration-200
+          ease-out
+
+          print:hidden
+
+          ${isOpen ? 'w-[260px]' : 'w-[72px]'}
+        `}
+      >
+
+
+        {/* ====================================================
+            LOGO
+           ==================================================== */}
+
+        <div
+          className={`
+            flex
+            h-[76px]
+            shrink-0
+            items-center
+
+            border-b
+            border-white/[0.08]
+
+            ${
+              isOpen
+                ? 'justify-between px-5'
+                : 'justify-center'
+            }
+          `}
+        >
+
+
+          {/* LOGO ABERTA */}
+
           {isOpen && (
-            <div className="flex items-center gap-2 overflow-hidden">
-              <img 
-                src="/logo.png" 
-                alt="Logo EasyVacc" 
-                className="w-10 h-10 object-contain"
-                onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/40?text=eV'; }}
-              />
-              <span className="font-black text-slate-800 text-lg tracking-tight">EasyVacc</span>
-            </div>
+
+            <Link
+              to="/dashboard"
+              className="
+                flex
+                items-center
+                gap-3
+              "
+            >
+
+              <div
+                className="
+                  flex
+                  h-9
+                  w-9
+                  shrink-0
+                  items-center
+                  justify-center
+
+                  rounded-md
+
+                  bg-white
+                "
+              >
+
+                <img
+                  src="/logo.png"
+                  alt="EasyVacc"
+                  className="
+                    h-7
+                    w-7
+                    object-contain
+                  "
+                />
+
+              </div>
+
+
+              <div>
+
+                <div
+                  className="
+                    text-[17px]
+                    font-bold
+                    tracking-tight
+                    text-white
+                  "
+                >
+                  Easy
+                  <span className="text-emerald-400">
+                    Vacc
+                  </span>
+                </div>
+
+
+                <p
+                  className="
+                    mt-0.5
+
+                    text-[9px]
+                    font-medium
+                    uppercase
+                    tracking-[0.16em]
+
+                    text-slate-500
+                  "
+                >
+                  Caderneta digital
+                </p>
+
+              </div>
+
+            </Link>
+
           )}
-          
-          <button 
-            onClick={() => setIsOpen(!isOpen)} 
-            className="w-10 h-10 rounded-xl bg-slate-50 text-slate-500 hover:bg-teal-50 hover:text-teal-600 flex items-center justify-center transition-colors mx-auto"
-            title={isOpen ? "Recolher menu" : "Expandir menu"}
-          >
-            {isOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+
+
+          {/* LOGO RECOLHIDA */}
+
+          {!isOpen && (
+
+            <Link
+              to="/dashboard"
+              title="EasyVacc"
+              className="
+                flex
+                h-9
+                w-9
+                items-center
+                justify-center
+
+                rounded-md
+
+                bg-white
+              "
+            >
+
+              <img
+                src="/logo.png"
+                alt="EasyVacc"
+                className="
+                  h-7
+                  w-7
+                  object-contain
+                "
+              />
+
+            </Link>
+
+          )}
+
         </div>
 
-        <nav className="flex-1 p-4 overflow-y-auto space-y-6 overflow-x-hidden">
-          
-          {/* Bloco 1: Principal */}
+
+        {/* ====================================================
+            MENU
+           ==================================================== */}
+
+        <nav
+          className="
+            flex-1
+            overflow-y-auto
+            overflow-x-hidden
+
+            px-3
+            py-5
+          "
+        >
+
+
+          {/* ==================================================
+              VISÃO GERAL
+             ================================================== */}
+
+          {isOpen && (
+
+            <p
+              className="
+                mb-2
+                px-3
+
+                text-[9px]
+                font-semibold
+                uppercase
+                tracking-[0.16em]
+
+                text-slate-500
+              "
+            >
+              Visão geral
+            </p>
+
+          )}
+
+
           <div className="space-y-1">
-            {isOpen && <p className="text-[10px] font-black text-slate-400 mb-2 px-3 tracking-widest uppercase">Caderneta</p>}
-            
-            <Link to="/dashboard" title="Início" className={`flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-teal-50 hover:text-teal-600 rounded-2xl transition-all font-bold ${!isOpen && 'justify-center px-0'}`}>
-              <Home size={20} strokeWidth={2.5} className="shrink-0" /> 
-              {isOpen && <span className="text-sm truncate">Início</span>}
-            </Link>
-            
-            <Link to="/historico" title="Minhas Vacinas" className={`flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-teal-50 hover:text-teal-600 rounded-2xl transition-all font-bold ${!isOpen && 'justify-center px-0'}`}>
-              <ShieldCheck size={20} strokeWidth={2.5} className="shrink-0" /> 
-              {isOpen && <span className="text-sm truncate">Minhas Vacinas</span>}
-            </Link>
 
-            <Link to="/certificado" title="Emitir Certificado" className={`flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-teal-50 hover:text-teal-600 rounded-2xl transition-all font-bold ${!isOpen && 'justify-center px-0'}`}>
-              <FileText size={20} strokeWidth={2.5} className="shrink-0" /> 
-              {isOpen && <span className="text-sm truncate">Emitir Certificado</span>}
-            </Link>
+            <NavLink
+              to="/dashboard"
+              title="Início"
+              className={estiloLink}
+            >
 
-            <Link to="/perfil" title="Meu Perfil" className={`flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-teal-50 hover:text-teal-600 rounded-2xl transition-all font-bold ${!isOpen && 'justify-center px-0'}`}>
-              <User size={20} strokeWidth={2.5} className="shrink-0" /> 
-              {isOpen && <span className="text-sm truncate">Meu Perfil</span>}
-            </Link>
-          </div>
+              <LayoutDashboard
+                size={18}
+                strokeWidth={1.8}
+                className="shrink-0"
+              />
 
-          {/* Bloco 2: Serviços e Saúde */}
-          <div className="space-y-1">
-            {isOpen && <p className="text-[10px] font-black text-slate-400 mb-2 px-3 tracking-widest uppercase">Serviços</p>}
-            
-            <Link to="/notificacoes" title="Notificações" className={`flex items-center justify-between px-4 py-3 text-slate-500 hover:bg-teal-50 hover:text-teal-600 rounded-2xl transition-all font-bold ${!isOpen && 'justify-center px-0'}`}>
-              <div className="flex items-center gap-3">
-                <Bell size={20} strokeWidth={2.5} className="shrink-0" /> 
-                {isOpen && <span className="text-sm truncate">Notificações</span>}
-              </div>
-              {/* O número de notificações só aparece se houver alertas não lidos */}
-              {isOpen && notificacoesNaoLidas > 0 && (
-                <span className="bg-teal-100 text-teal-700 text-[10px] px-2 py-0.5 rounded-full font-black">
-                  {notificacoesNaoLidas}
+              {isOpen && (
+                <span className="truncate">
+                  Início
                 </span>
               )}
-            </Link>
 
-            <Link to="/campanhas" title="Campanhas" className={`flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-teal-50 hover:text-teal-600 rounded-2xl transition-all font-bold ${!isOpen && 'justify-center px-0'}`}>
-              <Calendar size={20} strokeWidth={2.5} className="shrink-0" /> 
-              {isOpen && <span className="text-sm truncate">Campanhas</span>}
-            </Link>
+            </NavLink>
 
-            <Link to="/postos" title="Postos de Saúde" className={`flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-teal-50 hover:text-teal-600 rounded-2xl transition-all font-bold ${!isOpen && 'justify-center px-0'}`}>
-              <MapPin size={20} strokeWidth={2.5} className="shrink-0" /> 
-              {isOpen && <span className="text-sm truncate">Postos de Saúde</span>}
-            </Link>
           </div>
 
-          {/* Bloco 3: Dependentes Dinâmicos */}
-          <div className="space-y-1">
-            {isOpen && <p className="text-[10px] font-black text-slate-400 mb-2 px-3 tracking-widest uppercase">Dependentes</p>}
-            
-            {dependentes.length > 0 ? (
-              dependentes.map((dep) => (
-                <div key={dep.id} className={`flex items-center gap-3 px-4 py-2.5 text-slate-600 bg-teal-50/50 rounded-2xl transition-all font-bold ${!isOpen && 'justify-center px-0'}`}>
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-emerald-500 text-white flex items-center justify-center text-xs font-black shadow-md shrink-0">
-                    {dep.nome.charAt(0).toUpperCase()}
-                  </div>
-                  {isOpen && (
-                    <div className="flex flex-col truncate">
-                      <span className="text-sm truncate text-slate-800">{dep.nome}</span>
-                      <span className="text-[10px] text-slate-400 font-semibold">{dep.parentesco}</span>
-                    </div>
-                  )}
-                </div>
-              ))
-            ) : (
-              isOpen && <p className="text-xs text-slate-400 px-3 italic">Nenhum dependente.</p>
+
+          {/* ==================================================
+              CADERNETA
+             ================================================== */}
+
+          <div className="mt-6">
+
+            {isOpen && (
+
+              <p
+                className="
+                  mb-2
+                  px-3
+
+                  text-[9px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.16em]
+
+                  text-slate-500
+                "
+              >
+                Caderneta
+              </p>
+
             )}
 
-            <Link to="/adicionar-dependente" title="Adicionar pessoa" className={`flex items-center gap-3 px-4 py-3 mt-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 rounded-2xl transition-all font-bold border-2 border-dashed border-slate-200 hover:border-slate-300 ${!isOpen && 'justify-center px-0 border-none'}`}>
-              <PlusCircle size={20} strokeWidth={2.5} className="shrink-0" />
-              {isOpen && <span className="text-sm truncate">Adicionar pessoa</span>}
-            </Link>
+
+            <div className="space-y-1">
+
+
+              {/* VACINAS */}
+
+              <NavLink
+                to="/historico"
+                title="Vacinação"
+                className={estiloLink}
+              >
+
+                <Syringe
+                  size={18}
+                  strokeWidth={1.8}
+                  className="shrink-0"
+                />
+
+                {isOpen && (
+                  <span className="truncate">
+                    Vacinação
+                  </span>
+                )}
+
+              </NavLink>
+
+
+              {/* CERTIFICADO */}
+
+              <NavLink
+                to="/certificado"
+                title="Certificado"
+                className={estiloLink}
+              >
+
+                <FileText
+                  size={18}
+                  strokeWidth={1.8}
+                  className="shrink-0"
+                />
+
+                {isOpen && (
+                  <span className="truncate">
+                    Certificado
+                  </span>
+                )}
+
+              </NavLink>
+
+            </div>
+
           </div>
+
+
+          {/* ==================================================
+              SERVIÇOS
+             ================================================== */}
+
+          <div className="mt-6">
+
+            {isOpen && (
+
+              <p
+                className="
+                  mb-2
+                  px-3
+
+                  text-[9px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.16em]
+
+                  text-slate-500
+                "
+              >
+                Serviços
+              </p>
+
+            )}
+
+
+            <div className="space-y-1">
+
+
+              {/* NOTIFICAÇÕES */}
+
+              <NavLink
+                to="/notificacoes"
+                title="Notificações"
+                className={estiloLink}
+              >
+
+                <Bell
+                  size={18}
+                  strokeWidth={1.8}
+                  className="shrink-0"
+                />
+
+
+                {isOpen && (
+
+                  <div
+                    className="
+                      flex
+                      min-w-0
+                      flex-1
+                      items-center
+                      justify-between
+                      gap-3
+                    "
+                  >
+
+                    <span className="truncate">
+                      Notificações
+                    </span>
+
+
+                    {notificacoesNaoLidas > 0 && (
+
+                      <span
+                        className="
+                          flex
+                          min-w-5
+                          items-center
+                          justify-center
+
+                          rounded-full
+
+                          bg-emerald-500
+
+                          px-1.5
+                          py-0.5
+
+                          text-[9px]
+                          font-bold
+                          text-white
+                        "
+                      >
+                        {notificacoesNaoLidas}
+                      </span>
+
+                    )}
+
+                  </div>
+
+                )}
+
+
+                {!isOpen &&
+                  notificacoesNaoLidas > 0 && (
+
+                    <span
+                      className="
+                        absolute
+                        right-2
+                        top-2
+
+                        h-1.5
+                        w-1.5
+
+                        rounded-full
+                        bg-emerald-400
+                      "
+                    />
+
+                  )}
+
+              </NavLink>
+
+
+              {/* CAMPANHAS */}
+
+              <NavLink
+                to="/campanhas"
+                title="Campanhas"
+                className={estiloLink}
+              >
+
+                <CalendarDays
+                  size={18}
+                  strokeWidth={1.8}
+                  className="shrink-0"
+                />
+
+                {isOpen && (
+                  <span className="truncate">
+                    Campanhas
+                  </span>
+                )}
+
+              </NavLink>
+
+
+              {/* POSTOS */}
+
+              <NavLink
+                to="/postos"
+                title="Postos de Saúde"
+                className={estiloLink}
+              >
+
+                <MapPin
+                  size={18}
+                  strokeWidth={1.8}
+                  className="shrink-0"
+                />
+
+                {isOpen && (
+                  <span className="truncate">
+                    Postos de saúde
+                  </span>
+                )}
+
+              </NavLink>
+
+
+              {/* PERFIL */}
+
+              <NavLink
+                to="/perfil"
+                title="Meu Perfil"
+                className={estiloLink}
+              >
+
+                <UserRound
+                  size={18}
+                  strokeWidth={1.8}
+                  className="shrink-0"
+                />
+
+                {isOpen && (
+                  <span className="truncate">
+                    Meu perfil
+                  </span>
+                )}
+
+              </NavLink>
+
+            </div>
+
+          </div>
+
+
+          {/* ==================================================
+              DEPENDENTES
+             ================================================== */}
+
+          <div className="mt-6">
+
+
+            {isOpen && (
+
+              <div
+                className="
+                  mb-2
+                  flex
+                  items-center
+                  justify-between
+
+                  px-3
+                "
+              >
+
+                <p
+                  className="
+                    text-[9px]
+                    font-semibold
+                    uppercase
+                    tracking-[0.16em]
+
+                    text-slate-500
+                  "
+                >
+                  Dependentes
+                </p>
+
+
+                {dependentes.length > 0 && (
+
+                  <span
+                    className="
+                      text-[9px]
+                      font-semibold
+                      text-slate-500
+                    "
+                  >
+                    {dependentes.length}
+                  </span>
+
+                )}
+
+              </div>
+
+            )}
+
+
+            {/* ==================================================
+                LISTA DE DEPENDENTES
+               ================================================== */}
+
+            <div className="space-y-1">
+
+              {dependentes.map((dependente) => (
+
+                <div
+                  key={dependente.id}
+                  title={dependente.nome}
+                  className={`
+                    flex
+                    h-11
+                    items-center
+
+                    rounded-md
+
+                    text-slate-400
+
+                    ${
+                      isOpen
+                        ? 'gap-3 px-3'
+                        : 'justify-center'
+                    }
+                  `}
+                >
+
+
+                  {/* INICIAL */}
+
+                  <div
+                    className="
+                      flex
+                      h-7
+                      w-7
+                      shrink-0
+                      items-center
+                      justify-center
+
+                      rounded-md
+
+                      bg-white/[0.08]
+
+                      text-[11px]
+                      font-semibold
+                      text-slate-200
+                    "
+                  >
+                    {dependente.nome
+                      ?.charAt(0)
+                      .toUpperCase()}
+                  </div>
+
+
+                  {/* INFORMAÇÕES */}
+
+                  {isOpen && (
+
+                    <div className="min-w-0">
+
+                      <p
+                        className="
+                          truncate
+                          text-xs
+                          font-medium
+                          text-slate-300
+                        "
+                      >
+                        {dependente.nome}
+                      </p>
+
+                      <p
+                        className="
+                          mt-0.5
+                          truncate
+                          text-[9px]
+                          text-slate-500
+                        "
+                      >
+                        {dependente.parentesco}
+                      </p>
+
+                    </div>
+
+                  )}
+
+                </div>
+
+              ))}
+
+
+              {/* SEM DEPENDENTES */}
+
+              {dependentes.length === 0 &&
+                isOpen && (
+
+                  <div
+                    className="
+                      px-3
+                      py-2
+                    "
+                  >
+
+                    <p
+                      className="
+                        text-[11px]
+                        leading-5
+                        text-slate-500
+                      "
+                    >
+                      Nenhum dependente cadastrado.
+                    </p>
+
+                  </div>
+
+                )}
+
+
+              {/* ADICIONAR */}
+
+              <NavLink
+                to="/adicionar-dependente"
+                title="Adicionar dependente"
+                className={estiloLink}
+              >
+
+                <UserPlus
+                  size={18}
+                  strokeWidth={1.8}
+                  className="shrink-0"
+                />
+
+                {isOpen && (
+                  <span className="truncate">
+                    Adicionar dependente
+                  </span>
+                )}
+
+              </NavLink>
+
+            </div>
+
+          </div>
+
         </nav>
 
-        {/* Rodapé da Sidebar (Sair) */}
-        <div className="p-4 border-t border-slate-50">
-          <Link to="/" title="Sair da Conta" className={`flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-red-50 hover:text-red-500 rounded-2xl transition-all font-bold ${!isOpen && 'justify-center px-0'}`}>
-            <LogOut size={20} strokeWidth={2.5} className="shrink-0" /> 
-            {isOpen && <span className="text-sm truncate">Sair da Conta</span>}
+
+        {/* ====================================================
+            RODAPÉ DA SIDEBAR
+           ==================================================== */}
+
+        <div
+          className="
+            shrink-0
+
+            border-t
+            border-white/[0.08]
+
+            p-3
+          "
+        >
+
+
+          {/* CONTA */}
+
+          {isOpen && (
+
+            <Link
+              to="/perfil"
+              className="
+                mb-2
+
+                flex
+                items-center
+                gap-3
+
+                rounded-md
+
+                px-3
+                py-2.5
+
+                transition-colors
+
+                hover:bg-white/[0.05]
+              "
+            >
+
+              <div
+                className="
+                  flex
+                  h-8
+                  w-8
+                  shrink-0
+                  items-center
+                  justify-center
+
+                  rounded-md
+
+                  bg-white
+
+                  text-xs
+                  font-bold
+                  text-[#0b2239]
+                "
+              >
+                JV
+              </div>
+
+
+              <div className="min-w-0 flex-1">
+
+                <p
+                  className="
+                    truncate
+                    text-xs
+                    font-medium
+                    text-slate-200
+                  "
+                >
+                  João Victor
+                </p>
+
+                <p
+                  className="
+                    mt-0.5
+                    truncate
+                    text-[9px]
+                    text-slate-500
+                  "
+                >
+                  Conta pessoal
+                </p>
+
+              </div>
+
+
+              <ChevronRight
+                size={14}
+                className="text-slate-600"
+              />
+
+            </Link>
+
+          )}
+
+
+          {/* SAIR */}
+
+          <Link
+            to="/"
+            title="Sair da conta"
+            className={`
+              flex
+              h-10
+              items-center
+
+              rounded-md
+
+              text-slate-500
+
+              transition-colors
+
+              hover:bg-red-500/10
+              hover:text-red-300
+
+              ${
+                isOpen
+                  ? 'gap-3 px-3'
+                  : 'justify-center'
+              }
+            `}
+          >
+
+            <LogOut
+              size={17}
+              strokeWidth={1.8}
+              className="shrink-0"
+            />
+
+            {isOpen && (
+
+              <span
+                className="
+                  text-xs
+                  font-medium
+                "
+              >
+                Sair da conta
+              </span>
+
+            )}
+
           </Link>
+
         </div>
+
+
+        {/* ====================================================
+            BOTÃO DE RECOLHER
+           ==================================================== */}
+
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          title={
+            isOpen
+              ? 'Recolher menu'
+              : 'Expandir menu'
+          }
+          className="
+            absolute
+            -right-3.5
+            top-[30px]
+
+            z-40
+
+            flex
+            h-7
+            w-7
+            items-center
+            justify-center
+
+            rounded-full
+
+            border
+            border-slate-200
+
+            bg-white
+
+            text-slate-500
+
+            shadow-sm
+
+            transition-colors
+
+            hover:bg-slate-50
+            hover:text-slate-900
+          "
+        >
+
+          {isOpen ? (
+            <PanelLeftClose size={14} />
+          ) : (
+            <PanelLeftOpen size={14} />
+          )}
+
+        </button>
+
       </aside>
 
-      {/* Conteúdo Principal */}
-      <main className="flex-1 overflow-y-auto relative print:overflow-visible print:bg-white bg-[#F8FAFC]">
-        <Outlet /> 
+
+      {/* ======================================================
+          CONTEÚDO PRINCIPAL
+         ====================================================== */}
+
+      <main
+        className="
+          relative
+          flex-1
+
+          overflow-y-auto
+
+          bg-slate-50
+
+          print:overflow-visible
+          print:bg-white
+        "
+      >
+
+        {/* Dashboard, Histórico, Perfil, etc. */}
+
+        <Outlet />
+
       </main>
 
     </div>
+
   );
+
 }

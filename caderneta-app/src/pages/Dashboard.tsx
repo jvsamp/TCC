@@ -1,274 +1,434 @@
 import {
-  ShieldCheck,
-  FileText,
-  User,
-  PlusCircle,
-  CheckCircle2,
-  ArrowUpRight,
-  Activity,
-  Syringe,
+  ArrowRight,
+  Bell,
   CalendarDays,
-  Sparkles,
-  HeartPulse,
+  CheckCircle2,
+  ChevronRight,
+  FileText,
+  MapPin,
+  Plus,
+  ShieldCheck,
+  Syringe,
+  User,
 } from 'lucide-react';
 
 import { Link } from 'react-router-dom';
 
+
 export default function Dashboard() {
+
   return (
+
     /*
       ==========================================================
       DASHBOARD EASYVACC
       ==========================================================
-      Fundo escuro + gradientes + transparência + animações.
-      Toda a parte funcional continua usando as mesmas rotas.
+
+      Nova identidade visual:
+      - Institucional
+      - Profissional
+      - Clean
+      - Inspirada em sistemas de saúde / healthtech
+      - Verde utilizado apenas como destaque
+      - Azul-marinho como cor institucional
+      - Sem efeitos exagerados
+
+      As rotas originais foram mantidas.
     */
-    <div className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
 
-      {/* ======================================================
-          LUZES DECORATIVAS DO FUNDO
-          São círculos desfocados que criam o efeito de luz.
-         ====================================================== */}
-
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-
-        <div
-          className="
-            absolute -top-40 -left-40
-            h-[500px] w-[500px]
-            rounded-full
-            bg-emerald-500/20
-            blur-[120px]
-            animate-pulse
-          "
-        />
-
-        <div
-          className="
-            absolute top-1/3 -right-40
-            h-[550px] w-[550px]
-            rounded-full
-            bg-cyan-500/20
-            blur-[140px]
-            animate-pulse
-          "
-        />
-
-        <div
-          className="
-            absolute bottom-0 left-1/3
-            h-[400px] w-[400px]
-            rounded-full
-            bg-teal-500/10
-            blur-[120px]
-          "
-        />
-
-      </div>
+    <div className="min-h-full bg-slate-50 text-slate-900">
 
 
       {/* ======================================================
-          CONTEÚDO PRINCIPAL
+          CONTAINER PRINCIPAL
          ====================================================== */}
 
       <div
         className="
-          relative z-10
-          mx-auto max-w-7xl
-          p-6 md:p-12
-          pb-20
-          animate-fade-in
+          mx-auto
+          max-w-7xl
+          px-6
+          py-8
+          md:px-10
+          md:py-10
         "
       >
 
+
         {/* ====================================================
-            BANNER PRINCIPAL
+            CABEÇALHO
            ==================================================== */}
 
-        <div
+        <header
           className="
-            relative
-            overflow-hidden
-            rounded-[2.5rem]
-            border border-white/10
-            bg-gradient-to-br
-            from-emerald-500/30
-            via-teal-500/20
-            to-cyan-500/20
-            p-8 md:p-10
-            shadow-2xl
-            shadow-cyan-950/40
-            backdrop-blur-xl
             mb-8
+            flex
+            flex-col
+            justify-between
+            gap-5
+            border-b
+            border-slate-200
+            pb-7
+
+            lg:flex-row
+            lg:items-end
           "
         >
 
-          {/* Luz interna do banner */}
+          <div>
 
-          <div
-            className="
-              absolute -right-20 -top-20
-              h-72 w-72
-              rounded-full
-              bg-cyan-400/20
-              blur-3xl
-              animate-pulse
-            "
-          />
+            {/* CAMINHO DA PÁGINA */}
 
-          <div
-            className="
-              absolute -bottom-32 left-1/3
-              h-72 w-72
-              rounded-full
-              bg-emerald-400/20
-              blur-3xl
-            "
-          />
+            <div
+              className="
+                mb-2
+                flex
+                items-center
+                gap-2
+                text-xs
+                font-semibold
+                uppercase
+                tracking-[0.12em]
+                text-slate-500
+              "
+            >
+
+              <span>EasyVacc</span>
+
+              <ChevronRight size={13} />
+
+              <span className="text-slate-700">
+                Visão geral
+              </span>
+
+            </div>
 
 
-          <div
-            className="
-              relative z-10
-              flex flex-col
-              md:flex-row
-              justify-between
-              items-start
-              md:items-center
-              gap-8
-            "
-          >
+            {/* TÍTULO */}
 
-            {/* LADO ESQUERDO */}
+            <h1
+              className="
+                text-3xl
+                font-bold
+                tracking-tight
+                text-slate-950
 
-            <div>
+                md:text-[34px]
+              "
+            >
+              Visão geral
+            </h1>
+
+
+            <p
+              className="
+                mt-2
+                max-w-2xl
+                text-sm
+                leading-6
+                text-slate-500
+              "
+            >
+              Acompanhe sua situação vacinal e acesse os
+              principais serviços da sua caderneta digital.
+            </p>
+
+          </div>
+
+
+          {/* AÇÕES DO CABEÇALHO */}
+
+          <div className="flex items-center gap-3">
+
+            <Link
+              to="/notificacoes"
+              className="
+                flex
+                h-10
+                w-10
+                items-center
+                justify-center
+
+                rounded-lg
+
+                border
+                border-slate-200
+
+                bg-white
+
+                text-slate-500
+
+                shadow-sm
+
+                transition-colors
+
+                hover:border-slate-300
+                hover:bg-slate-50
+                hover:text-slate-800
+              "
+              title="Notificações"
+            >
+              <Bell size={18} />
+            </Link>
+
+
+            <Link
+              to="/perfil"
+              className="
+                flex
+                items-center
+                gap-3
+
+                rounded-lg
+
+                border
+                border-slate-200
+
+                bg-white
+
+                px-3
+                py-2
+
+                shadow-sm
+
+                transition-colors
+
+                hover:border-slate-300
+                hover:bg-slate-50
+              "
+            >
 
               <div
                 className="
+                  flex
+                  h-8
+                  w-8
+                  items-center
+                  justify-center
+
+                  rounded-md
+
+                  bg-slate-900
+                  text-white
+                "
+              >
+                <User size={16} />
+              </div>
+
+
+              <div className="hidden text-left sm:block">
+
+                <p
+                  className="
+                    text-xs
+                    font-semibold
+                    text-slate-800
+                  "
+                >
+                  João Victor
+                </p>
+
+                <p
+                  className="
+                    text-[10px]
+                    text-slate-400
+                  "
+                >
+                  Minha conta
+                </p>
+
+              </div>
+
+            </Link>
+
+          </div>
+
+        </header>
+
+
+        {/* ====================================================
+            PAINEL PRINCIPAL
+           ==================================================== */}
+
+        <section
+          className="
+            mb-7
+            overflow-hidden
+
+            rounded-xl
+
+            border
+            border-slate-200
+
+            bg-white
+
+            shadow-sm
+          "
+        >
+
+          <div
+            className="
+              grid
+              lg:grid-cols-[1fr_340px]
+            "
+          >
+
+
+            {/* ==================================================
+                APRESENTAÇÃO
+               ================================================== */}
+
+            <div
+              className="
+                p-6
+                md:p-8
+              "
+            >
+
+              <div
+                className="
+                  mb-5
                   inline-flex
                   items-center
                   gap-2
-                  rounded-full
-                  border border-emerald-300/20
-                  bg-emerald-400/10
-                  px-4 py-2
+
+                  rounded-md
+
+                  bg-emerald-50
+
+                  px-2.5
+                  py-1.5
+
                   text-xs
-                  font-bold
-                  text-emerald-200
-                  backdrop-blur-xl
-                  mb-5
+                  font-semibold
+                  text-emerald-800
                 "
               >
-                <Activity size={14} />
 
-                Sistema Integrado SUS
+                <CheckCircle2 size={14} />
 
-                <span className="relative flex h-2 w-2">
-
-                  <span
-                    className="
-                      absolute inline-flex
-                      h-full w-full
-                      animate-ping
-                      rounded-full
-                      bg-emerald-400
-                      opacity-75
-                    "
-                  />
-
-                  <span
-                    className="
-                      relative inline-flex
-                      h-2 w-2
-                      rounded-full
-                      bg-emerald-400
-                    "
-                  />
-
-                </span>
+                Caderneta atualizada
 
               </div>
 
 
-              <h1
+              <p
                 className="
-                  text-4xl
-                  md:text-5xl
-                  font-black
-                  tracking-tight
+                  text-sm
+                  font-medium
+                  text-slate-500
                 "
               >
-                Olá, João Victor
-                <span className="inline-block ml-3 animate-bounce">
-                  👋
-                </span>
-              </h1>
+                Bem-vindo,
+              </p>
+
+
+              <h2
+                className="
+                  mt-1
+                  text-2xl
+                  font-bold
+                  tracking-tight
+                  text-slate-950
+
+                  md:text-3xl
+                "
+              >
+                João Victor
+              </h2>
 
 
               <p
                 className="
-                  mt-4
-                  max-w-2xl
+                  mt-3
+                  max-w-xl
+
                   text-sm
-                  md:text-base
-                  leading-relaxed
-                  text-slate-300
+                  leading-6
+                  text-slate-500
                 "
               >
-                Sua saúde em um só lugar. Acompanhe sua vacinação,
-                consulte seu histórico e mantenha sua proteção sempre
-                atualizada.
+                Consulte seus registros de imunização,
+                acompanhe próximas doses e mantenha seus
+                documentos de vacinação organizados em um
+                único ambiente.
               </p>
 
 
-              {/* BOTÕES DO BANNER */}
+              {/* BOTÕES */}
 
-              <div className="mt-7 flex flex-wrap gap-3">
+              <div
+                className="
+                  mt-6
+                  flex
+                  flex-wrap
+                  gap-3
+                "
+              >
 
                 <Link
                   to="/historico"
                   className="
-                    flex items-center gap-2
-                    rounded-xl
-                    bg-emerald-400
-                    px-5 py-3
-                    text-sm font-black
-                    text-slate-950
-                    shadow-lg
-                    shadow-emerald-500/20
-                    transition-all
-                    duration-300
-                    hover:-translate-y-1
-                    hover:bg-emerald-300
-                    hover:shadow-emerald-400/30
+                    inline-flex
+                    items-center
+                    gap-2
+
+                    rounded-lg
+
+                    bg-slate-900
+
+                    px-4
+                    py-2.5
+
+                    text-sm
+                    font-semibold
+                    text-white
+
+                    transition-colors
+
+                    hover:bg-slate-800
                   "
                 >
-                  <Syringe size={18} />
 
-                  Minhas Vacinas
+                  <Syringe size={16} />
+
+                  Consultar vacinas
+
                 </Link>
 
 
                 <Link
                   to="/certificado"
                   className="
-                    flex items-center gap-2
-                    rounded-xl
-                    border border-white/10
-                    bg-white/5
-                    px-5 py-3
-                    text-sm font-bold
-                    text-white
-                    backdrop-blur-xl
-                    transition-all
-                    duration-300
-                    hover:-translate-y-1
-                    hover:bg-white/10
+                    inline-flex
+                    items-center
+                    gap-2
+
+                    rounded-lg
+
+                    border
+                    border-slate-200
+
+                    bg-white
+
+                    px-4
+                    py-2.5
+
+                    text-sm
+                    font-semibold
+                    text-slate-700
+
+                    transition-colors
+
+                    hover:bg-slate-50
+                    hover:text-slate-950
                   "
                 >
-                  <FileText size={18} />
 
-                  Certificado
+                  <FileText size={16} />
+
+                  Emitir certificado
+
                 </Link>
 
               </div>
@@ -276,42 +436,63 @@ export default function Dashboard() {
             </div>
 
 
-            {/* STATUS DE PROTEÇÃO */}
+            {/* ==================================================
+                SITUAÇÃO VACINAL
+               ================================================== */}
 
             <div
               className="
-                group
-                min-w-[230px]
-                rounded-[2rem]
-                border border-white/10
-                bg-white/5
+                border-t
+                border-slate-200
+
+                bg-slate-50/70
+
                 p-6
-                backdrop-blur-xl
-                transition-all
-                duration-500
-                hover:-translate-y-2
-                hover:bg-white/10
+
+                lg:border-l
+                lg:border-t-0
+
+                md:p-8
               "
             >
 
-              <div className="flex items-center gap-4">
+              <p
+                className="
+                  text-xs
+                  font-semibold
+                  uppercase
+                  tracking-[0.12em]
+                  text-slate-400
+                "
+              >
+                Situação vacinal
+              </p>
+
+
+              <div
+                className="
+                  mt-5
+                  flex
+                  items-center
+                  gap-4
+                "
+              >
 
                 <div
                   className="
-                    flex h-14 w-14
-                    items-center justify-center
-                    rounded-2xl
-                    bg-emerald-400
-                    text-slate-950
-                    shadow-lg
-                    shadow-emerald-500/20
-                    transition-transform
-                    duration-500
-                    group-hover:rotate-6
-                    group-hover:scale-110
+                    flex
+                    h-11
+                    w-11
+                    items-center
+                    justify-center
+
+                    rounded-lg
+
+                    bg-emerald-100
+                    text-emerald-700
                   "
                 >
-                  <ShieldCheck size={30} />
+                  <ShieldCheck size={22} />
                 </div>
 
 
@@ -319,654 +500,904 @@ export default function Dashboard() {
 
                   <p
                     className="
-                      text-[10px]
-                      font-black
-                      uppercase
-                      tracking-[0.2em]
-                      text-slate-400
+                      text-lg
+                      font-bold
+                      text-slate-950
                     "
                   >
-                    Status Geral
+                    Em dia
                   </p>
 
-                  <p className="mt-1 text-lg font-black text-white">
-                    Protegido
-                  </p>
-
-                </div>
-
-              </div>
-
-
-              {/* BARRA DE PROGRESSO */}
-
-              <div className="mt-6">
-
-                <div
-                  className="
-                    mb-2
-                    flex
-                    justify-between
-                    text-xs
-                    font-bold
-                  "
-                >
-                  <span className="text-slate-400">
-                    Cobertura vacinal
-                  </span>
-
-                  <span className="text-emerald-300">
-                    100%
-                  </span>
-                </div>
-
-
-                <div
-                  className="
-                    h-2
-                    overflow-hidden
-                    rounded-full
-                    bg-white/10
-                  "
-                >
-                  <div
+                  <p
                     className="
-                      h-full
-                      w-full
-                      rounded-full
-                      bg-gradient-to-r
-                      from-emerald-400
-                      to-cyan-400
-                      shadow-lg
-                      shadow-emerald-400/30
+                      mt-0.5
+                      text-xs
+                      text-slate-500
                     "
-                  />
+                  >
+                    Nenhuma pendência registrada
+                  </p>
+
                 </div>
 
               </div>
 
-            </div>
 
-          </div>
-
-        </div>
-
-
-        {/* ====================================================
-            MINI CARDS DE STATUS
-           ==================================================== */}
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-
-          {/* VACINAS */}
-
-          <div
-            className="
-              group
-              rounded-2xl
-              border border-white/10
-              bg-white/[0.04]
-              p-5
-              backdrop-blur-xl
-              transition-all
-              duration-300
-              hover:-translate-y-1
-              hover:border-emerald-400/30
-              hover:bg-emerald-400/10
-            "
-          >
-            <div className="flex items-center gap-4">
+              {/* DIVISOR */}
 
               <div
                 className="
-                  flex h-11 w-11
-                  items-center justify-center
-                  rounded-xl
-                  bg-emerald-400/10
-                  text-emerald-300
+                  my-6
+                  h-px
+                  bg-slate-200
                 "
-              >
-                <Syringe size={22} />
-              </div>
-
-              <div>
-                <p className="text-2xl font-black">
-                  100%
-                </p>
-
-                <p className="text-xs font-semibold text-slate-400">
-                  Vacinação em dia
-                </p>
-              </div>
-
-            </div>
-          </div>
+              />
 
 
-          {/* STATUS */}
-
-          <div
-            className="
-              group
-              rounded-2xl
-              border border-white/10
-              bg-white/[0.04]
-              p-5
-              backdrop-blur-xl
-              transition-all
-              duration-300
-              hover:-translate-y-1
-              hover:border-cyan-400/30
-              hover:bg-cyan-400/10
-            "
-          >
-            <div className="flex items-center gap-4">
+              {/* COBERTURA */}
 
               <div
                 className="
-                  flex h-11 w-11
-                  items-center justify-center
-                  rounded-xl
-                  bg-cyan-400/10
-                  text-cyan-300
+                  flex
+                  items-end
+                  justify-between
                 "
               >
-                <HeartPulse size={22} />
+
+                <div>
+
+                  <p
+                    className="
+                      text-xs
+                      font-medium
+                      text-slate-500
+                    "
+                  >
+                    Cobertura registrada
+                  </p>
+
+                  <p
+                    className="
+                      mt-1
+                      text-3xl
+                      font-bold
+                      tracking-tight
+                      text-slate-950
+                    "
+                  >
+                    100%
+                  </p>
+
+                </div>
+
+
+                <span
+                  className="
+                    rounded-md
+                    bg-emerald-50
+                    px-2
+                    py-1
+
+                    text-[11px]
+                    font-semibold
+                    text-emerald-700
+                  "
+                >
+                  Atualizada
+                </span>
+
               </div>
 
-              <div>
-                <p className="text-2xl font-black">
-                  Protegido
-                </p>
 
-                <p className="text-xs font-semibold text-slate-400">
-                  Status de imunização
-                </p>
-              </div>
-
-            </div>
-          </div>
-
-
-          {/* PRÓXIMA DOSE */}
-
-          <div
-            className="
-              group
-              rounded-2xl
-              border border-white/10
-              bg-white/[0.04]
-              p-5
-              backdrop-blur-xl
-              transition-all
-              duration-300
-              hover:-translate-y-1
-              hover:border-teal-400/30
-              hover:bg-teal-400/10
-            "
-          >
-            <div className="flex items-center gap-4">
+              {/* BARRA */}
 
               <div
                 className="
-                  flex h-11 w-11
-                  items-center justify-center
-                  rounded-xl
-                  bg-teal-400/10
-                  text-teal-300
+                  mt-4
+                  h-1.5
+                  overflow-hidden
+                  rounded-full
+                  bg-slate-200
                 "
               >
-                <CalendarDays size={22} />
-              </div>
 
-              <div>
-                <p className="text-lg font-black">
-                  Em dia
-                </p>
+                <div
+                  className="
+                    h-full
+                    w-full
+                    rounded-full
+                    bg-emerald-600
+                  "
+                />
 
-                <p className="text-xs font-semibold text-slate-400">
-                  Nenhuma dose pendente
-                </p>
               </div>
 
             </div>
+
           </div>
 
-        </div>
+        </section>
 
 
         {/* ====================================================
-            TÍTULO ACESSO RÁPIDO
+            RESUMO DA CADERNETA
            ==================================================== */}
 
-        <div className="mb-6 flex items-center gap-3">
+        <section className="mb-8">
 
           <div
             className="
-              flex h-9 w-9
-              items-center justify-center
-              rounded-xl
-              bg-emerald-400/10
-              text-emerald-300
+              mb-4
+              flex
+              items-end
+              justify-between
             "
           >
-            <Sparkles size={18} />
+
+            <div>
+
+              <h2
+                className="
+                  text-base
+                  font-semibold
+                  text-slate-950
+                "
+              >
+                Resumo da caderneta
+              </h2>
+
+              <p
+                className="
+                  mt-1
+                  text-xs
+                  text-slate-500
+                "
+              >
+                Informações principais da sua vacinação.
+              </p>
+
+            </div>
+
+
+            <Link
+              to="/historico"
+              className="
+                hidden
+                items-center
+                gap-1
+
+                text-xs
+                font-semibold
+                text-slate-600
+
+                hover:text-slate-950
+
+                sm:flex
+              "
+            >
+              Ver histórico
+
+              <ArrowRight size={14} />
+            </Link>
+
           </div>
 
-          <div>
-            <h2 className="text-xl font-black">
-              Acesso Rápido
-            </h2>
 
-            <p className="text-xs text-slate-500">
-              Tudo que você precisa em poucos cliques
-            </p>
-          </div>
+          {/* CARDS DE RESUMO */}
 
-        </div>
-
-
-        {/* ====================================================
-            CARDS PRINCIPAIS
-           ==================================================== */}
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-
-
-          {/* ==================================================
-              CARD 1 - MINHAS VACINAS
-             ================================================== */}
-
-          <Link
-            to="/historico"
+          <div
             className="
-              group
-              relative
+              grid
+              grid-cols-1
+
               overflow-hidden
-              rounded-[2rem]
-              border border-white/10
-              bg-gradient-to-br
-              from-emerald-500/10
-              to-white/[0.03]
-              p-8
-              backdrop-blur-xl
-              transition-all
-              duration-500
-              hover:-translate-y-2
-              hover:border-emerald-400/30
-              hover:shadow-2xl
-              hover:shadow-emerald-950/30
+
+              rounded-xl
+
+              border
+              border-slate-200
+
+              bg-white
+
+              shadow-sm
+
+              md:grid-cols-3
             "
           >
 
-            {/* Luz que aparece no hover */}
+
+            {/* COBERTURA */}
 
             <div
               className="
-                absolute
-                -right-20
-                -top-20
-                h-48 w-48
-                rounded-full
-                bg-emerald-400/0
-                blur-3xl
-                transition-all
-                duration-500
-                group-hover:bg-emerald-400/20
+                flex
+                items-center
+                gap-4
+
+                border-b
+                border-slate-200
+
+                p-5
+
+                md:border-b-0
+                md:border-r
               "
-            />
-
-
-            <div className="relative z-10">
+            >
 
               <div
                 className="
-                  mb-7
-                  flex h-14 w-14
-                  items-center justify-center
-                  rounded-2xl
-                  bg-emerald-400/10
-                  text-emerald-300
-                  transition-all
-                  duration-500
-                  group-hover:rotate-6
-                  group-hover:scale-110
-                  group-hover:bg-emerald-400
-                  group-hover:text-slate-950
+                  flex
+                  h-10
+                  w-10
+                  shrink-0
+                  items-center
+                  justify-center
+
+                  rounded-lg
+
+                  bg-emerald-50
+                  text-emerald-700
                 "
               >
-                <ShieldCheck size={28} />
+                <ShieldCheck size={19} />
+              </div>
+
+
+              <div>
+
+                <p
+                  className="
+                    text-xs
+                    font-medium
+                    text-slate-500
+                  "
+                >
+                  Cobertura vacinal
+                </p>
+
+                <p
+                  className="
+                    mt-0.5
+                    text-xl
+                    font-bold
+                    text-slate-950
+                  "
+                >
+                  100%
+                </p>
+
+              </div>
+
+            </div>
+
+
+            {/* STATUS */}
+
+            <div
+              className="
+                flex
+                items-center
+                gap-4
+
+                border-b
+                border-slate-200
+
+                p-5
+
+                md:border-b-0
+                md:border-r
+              "
+            >
+
+              <div
+                className="
+                  flex
+                  h-10
+                  w-10
+                  shrink-0
+                  items-center
+                  justify-center
+
+                  rounded-lg
+
+                  bg-blue-50
+                  text-blue-700
+                "
+              >
+                <CheckCircle2 size={19} />
+              </div>
+
+
+              <div>
+
+                <p
+                  className="
+                    text-xs
+                    font-medium
+                    text-slate-500
+                  "
+                >
+                  Situação
+                </p>
+
+                <p
+                  className="
+                    mt-0.5
+                    text-xl
+                    font-bold
+                    text-slate-950
+                  "
+                >
+                  Em dia
+                </p>
+
+              </div>
+
+            </div>
+
+
+            {/* PRÓXIMA DOSE */}
+
+            <div
+              className="
+                flex
+                items-center
+                gap-4
+                p-5
+              "
+            >
+
+              <div
+                className="
+                  flex
+                  h-10
+                  w-10
+                  shrink-0
+                  items-center
+                  justify-center
+
+                  rounded-lg
+
+                  bg-slate-100
+                  text-slate-700
+                "
+              >
+                <CalendarDays size={19} />
+              </div>
+
+
+              <div>
+
+                <p
+                  className="
+                    text-xs
+                    font-medium
+                    text-slate-500
+                  "
+                >
+                  Próxima dose
+                </p>
+
+                <p
+                  className="
+                    mt-0.5
+                    text-base
+                    font-bold
+                    text-slate-950
+                  "
+                >
+                  Nenhuma pendência
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        {/* ====================================================
+            SERVIÇOS
+           ==================================================== */}
+
+        <section className="mb-8">
+
+          <div className="mb-4">
+
+            <h2
+              className="
+                text-base
+                font-semibold
+                text-slate-950
+              "
+            >
+              Serviços
+            </h2>
+
+            <p
+              className="
+                mt-1
+                text-xs
+                text-slate-500
+              "
+            >
+              Acesse rapidamente os recursos da plataforma.
+            </p>
+
+          </div>
+
+
+          <div
+            className="
+              grid
+              grid-cols-1
+              gap-4
+
+              md:grid-cols-2
+              xl:grid-cols-4
+            "
+          >
+
+
+            {/* ==================================================
+                HISTÓRICO
+               ================================================== */}
+
+            <Link
+              to="/historico"
+              className="
+                group
+
+                rounded-xl
+
+                border
+                border-slate-200
+
+                bg-white
+
+                p-5
+
+                shadow-sm
+
+                transition-all
+
+                hover:-translate-y-0.5
+                hover:border-slate-300
+                hover:shadow-md
+              "
+            >
+
+              <div
+                className="
+                  mb-5
+                  flex
+                  items-start
+                  justify-between
+                "
+              >
+
+                <div
+                  className="
+                    flex
+                    h-10
+                    w-10
+                    items-center
+                    justify-center
+
+                    rounded-lg
+
+                    bg-emerald-50
+                    text-emerald-700
+                  "
+                >
+                  <Syringe size={19} />
+                </div>
+
+
+                <ArrowRight
+                  size={16}
+                  className="
+                    text-slate-300
+                    transition-all
+
+                    group-hover:translate-x-1
+                    group-hover:text-slate-600
+                  "
+                />
+
               </div>
 
 
               <h3
                 className="
-                  mb-3
-                  text-xl
-                  font-black
-                  text-white
+                  text-sm
+                  font-semibold
+                  text-slate-900
                 "
               >
-                Minhas Vacinas
+                Histórico de vacinação
               </h3>
 
 
               <p
                 className="
-                  min-h-[72px]
-                  text-sm
-                  leading-relaxed
-                  text-slate-400
+                  mt-2
+                  text-xs
+                  leading-5
+                  text-slate-500
                 "
               >
-                Consulte seu histórico completo de imunização,
-                datas de aplicação e próximas doses.
+                Consulte aplicações, datas, lotes,
+                fabricantes e próximas doses.
               </p>
 
-
-              <div
-                className="
-                  mt-7
-                  flex
-                  items-center
-                  gap-2
-                  text-sm
-                  font-black
-                  text-emerald-300
-                "
-              >
-                Acessar histórico
-
-                <ArrowUpRight
-                  size={17}
-                  className="
-                    transition-transform
-                    duration-300
-                    group-hover:translate-x-1
-                    group-hover:-translate-y-1
-                  "
-                />
-
-              </div>
-
-            </div>
-
-          </Link>
+            </Link>
 
 
-          {/* ==================================================
-              CARD 2 - CERTIFICADO
-             ================================================== */}
+            {/* ==================================================
+                CERTIFICADO
+               ================================================== */}
 
-          <Link
-            to="/certificado"
-            className="
-              group
-              relative
-              overflow-hidden
-              rounded-[2rem]
-              border border-white/10
-              bg-gradient-to-br
-              from-teal-500/10
-              to-white/[0.03]
-              p-8
-              backdrop-blur-xl
-              transition-all
-              duration-500
-              hover:-translate-y-2
-              hover:border-teal-400/30
-              hover:shadow-2xl
-              hover:shadow-teal-950/30
-            "
-          >
-
-            <div
+            <Link
+              to="/certificado"
               className="
-                absolute
-                -right-20
-                -top-20
-                h-48 w-48
-                rounded-full
-                bg-teal-400/0
-                blur-3xl
+                group
+
+                rounded-xl
+
+                border
+                border-slate-200
+
+                bg-white
+
+                p-5
+
+                shadow-sm
+
                 transition-all
-                duration-500
-                group-hover:bg-teal-400/20
+
+                hover:-translate-y-0.5
+                hover:border-slate-300
+                hover:shadow-md
               "
-            />
-
-
-            <div className="relative z-10">
+            >
 
               <div
                 className="
-                  mb-7
-                  flex h-14 w-14
-                  items-center justify-center
-                  rounded-2xl
-                  bg-teal-400/10
-                  text-teal-300
-                  transition-all
-                  duration-500
-                  group-hover:-rotate-6
-                  group-hover:scale-110
-                  group-hover:bg-teal-400
-                  group-hover:text-slate-950
-                "
-              >
-                <FileText size={28} />
-              </div>
-
-
-              <h3 className="mb-3 text-xl font-black text-white">
-                Certificado Nacional
-              </h3>
-
-
-              <p
-                className="
-                  min-h-[72px]
-                  text-sm
-                  leading-relaxed
-                  text-slate-400
-                "
-              >
-                Gere seu comprovante oficial de vacinação
-                em PDF com QR Code de validação.
-              </p>
-
-
-              <div
-                className="
-                  mt-7
+                  mb-5
                   flex
-                  items-center
-                  gap-2
-                  text-sm
-                  font-black
-                  text-teal-300
+                  items-start
+                  justify-between
                 "
               >
-                Emitir PDF
 
-                <ArrowUpRight
-                  size={17}
+                <div
                   className="
-                    transition-transform
-                    duration-300
+                    flex
+                    h-10
+                    w-10
+                    items-center
+                    justify-center
+
+                    rounded-lg
+
+                    bg-blue-50
+                    text-blue-700
+                  "
+                >
+                  <FileText size={19} />
+                </div>
+
+
+                <ArrowRight
+                  size={16}
+                  className="
+                    text-slate-300
+                    transition-all
+
                     group-hover:translate-x-1
-                    group-hover:-translate-y-1
+                    group-hover:text-slate-600
                   "
                 />
 
               </div>
 
-            </div>
 
-          </Link>
+              <h3
+                className="
+                  text-sm
+                  font-semibold
+                  text-slate-900
+                "
+              >
+                Certificado
+              </h3>
 
 
-          {/* ==================================================
-              CARD 3 - PERFIL
-             ================================================== */}
+              <p
+                className="
+                  mt-2
+                  text-xs
+                  leading-5
+                  text-slate-500
+                "
+              >
+                Acesse seu comprovante digital de
+                vacinação e opções de emissão.
+              </p>
 
-          <Link
-            to="/perfil"
-            className="
-              group
-              relative
-              overflow-hidden
-              rounded-[2rem]
-              border border-white/10
-              bg-gradient-to-br
-              from-cyan-500/10
-              to-white/[0.03]
-              p-8
-              backdrop-blur-xl
-              transition-all
-              duration-500
-              hover:-translate-y-2
-              hover:border-cyan-400/30
-              hover:shadow-2xl
-              hover:shadow-cyan-950/30
-            "
-          >
+            </Link>
 
-            <div
+
+            {/* ==================================================
+                POSTOS
+               ================================================== */}
+
+            <Link
+              to="/postos"
               className="
-                absolute
-                -right-20
-                -top-20
-                h-48 w-48
-                rounded-full
-                bg-cyan-400/0
-                blur-3xl
+                group
+
+                rounded-xl
+
+                border
+                border-slate-200
+
+                bg-white
+
+                p-5
+
+                shadow-sm
+
                 transition-all
-                duration-500
-                group-hover:bg-cyan-400/20
+
+                hover:-translate-y-0.5
+                hover:border-slate-300
+                hover:shadow-md
               "
-            />
-
-
-            <div className="relative z-10">
+            >
 
               <div
                 className="
-                  mb-7
-                  flex h-14 w-14
-                  items-center justify-center
-                  rounded-2xl
-                  bg-cyan-400/10
-                  text-cyan-300
-                  transition-all
-                  duration-500
-                  group-hover:rotate-6
-                  group-hover:scale-110
-                  group-hover:bg-cyan-400
-                  group-hover:text-slate-950
-                "
-              >
-                <User size={28} />
-              </div>
-
-
-              <h3 className="mb-3 text-xl font-black text-white">
-                Meu Perfil e Dados
-              </h3>
-
-
-              <p
-                className="
-                  min-h-[72px]
-                  text-sm
-                  leading-relaxed
-                  text-slate-400
-                "
-              >
-                Visualize suas informações cadastrais,
-                endereço, tipo sanguíneo e contato de emergência.
-              </p>
-
-
-              <div
-                className="
-                  mt-7
+                  mb-5
                   flex
-                  items-center
-                  gap-2
-                  text-sm
-                  font-black
-                  text-cyan-300
+                  items-start
+                  justify-between
                 "
               >
-                Gerenciar dados
 
-                <ArrowUpRight
-                  size={17}
+                <div
                   className="
-                    transition-transform
-                    duration-300
+                    flex
+                    h-10
+                    w-10
+                    items-center
+                    justify-center
+
+                    rounded-lg
+
+                    bg-slate-100
+                    text-slate-700
+                  "
+                >
+                  <MapPin size={19} />
+                </div>
+
+
+                <ArrowRight
+                  size={16}
+                  className="
+                    text-slate-300
+                    transition-all
+
                     group-hover:translate-x-1
-                    group-hover:-translate-y-1
+                    group-hover:text-slate-600
                   "
                 />
 
               </div>
 
-            </div>
 
-          </Link>
+              <h3
+                className="
+                  text-sm
+                  font-semibold
+                  text-slate-900
+                "
+              >
+                Postos de saúde
+              </h3>
 
-        </div>
+
+              <p
+                className="
+                  mt-2
+                  text-xs
+                  leading-5
+                  text-slate-500
+                "
+              >
+                Consulte unidades de atendimento e
+                informações dos postos cadastrados.
+              </p>
+
+            </Link>
+
+
+            {/* ==================================================
+                PERFIL
+               ================================================== */}
+
+            <Link
+              to="/perfil"
+              className="
+                group
+
+                rounded-xl
+
+                border
+                border-slate-200
+
+                bg-white
+
+                p-5
+
+                shadow-sm
+
+                transition-all
+
+                hover:-translate-y-0.5
+                hover:border-slate-300
+                hover:shadow-md
+              "
+            >
+
+              <div
+                className="
+                  mb-5
+                  flex
+                  items-start
+                  justify-between
+                "
+              >
+
+                <div
+                  className="
+                    flex
+                    h-10
+                    w-10
+                    items-center
+                    justify-center
+
+                    rounded-lg
+
+                    bg-violet-50
+                    text-violet-700
+                  "
+                >
+                  <User size={19} />
+                </div>
+
+
+                <ArrowRight
+                  size={16}
+                  className="
+                    text-slate-300
+                    transition-all
+
+                    group-hover:translate-x-1
+                    group-hover:text-slate-600
+                  "
+                />
+
+              </div>
+
+
+              <h3
+                className="
+                  text-sm
+                  font-semibold
+                  text-slate-900
+                "
+              >
+                Dados pessoais
+              </h3>
+
+
+              <p
+                className="
+                  mt-2
+                  text-xs
+                  leading-5
+                  text-slate-500
+                "
+              >
+                Consulte e gerencie as informações
+                vinculadas à sua conta.
+              </p>
+
+            </Link>
+
+          </div>
+
+        </section>
 
 
         {/* ====================================================
             DEPENDENTES
            ==================================================== */}
 
-        <div
+        <section
           className="
             flex
             flex-col
-            md:flex-row
-            items-center
             justify-between
             gap-5
-            rounded-[2rem]
-            border border-white/10
-            bg-gradient-to-r
-            from-white/[0.05]
-            to-emerald-400/[0.05]
-            p-6
-            backdrop-blur-xl
+
+            rounded-xl
+
+            border
+            border-slate-200
+
+            bg-white
+
+            p-5
+
+            shadow-sm
+
+            md:flex-row
+            md:items-center
           "
         >
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-start gap-4">
 
             <div
               className="
-                flex h-12 w-12
+                flex
+                h-10
+                w-10
                 shrink-0
-                items-center justify-center
-                rounded-2xl
-                bg-emerald-400/10
-                text-emerald-300
+                items-center
+                justify-center
+
+                rounded-lg
+
+                bg-slate-100
+                text-slate-700
               "
             >
-              <CheckCircle2 size={23} />
+              <User size={19} />
             </div>
 
 
             <div>
 
-              <p className="font-bold text-white">
-                Gerencie também sua família
-              </p>
+              <h2
+                className="
+                  text-sm
+                  font-semibold
+                  text-slate-900
+                "
+              >
+                Dependentes
+              </h2>
 
-              <p className="mt-1 text-sm text-slate-400">
-                Cadastre filhos ou familiares como dependentes
-                e acompanhe a vacinação deles.
+
+              <p
+                className="
+                  mt-1
+                  max-w-2xl
+                  text-xs
+                  leading-5
+                  text-slate-500
+                "
+              >
+                Adicione familiares à sua conta para
+                acompanhar as informações de vacinação
+                em um único lugar.
               </p>
 
             </div>
@@ -977,32 +1408,44 @@ export default function Dashboard() {
           <Link
             to="/adicionar-dependente"
             className="
-              flex
+              inline-flex
               shrink-0
               items-center
+              justify-center
               gap-2
-              rounded-xl
-              border border-emerald-400/20
-              bg-emerald-400/10
-              px-5 py-3
+
+              rounded-lg
+
+              border
+              border-slate-300
+
+              bg-white
+
+              px-4
+              py-2.5
+
               text-xs
-              font-black
-              text-emerald-300
-              transition-all
-              duration-300
-              hover:-translate-y-1
-              hover:bg-emerald-400
+              font-semibold
+              text-slate-700
+
+              transition-colors
+
+              hover:bg-slate-50
               hover:text-slate-950
             "
           >
-            <PlusCircle size={17} />
 
-            Adicionar Dependente
+            <Plus size={15} />
+
+            Adicionar dependente
+
           </Link>
 
-        </div>
+        </section>
 
       </div>
+
     </div>
+
   );
 }
