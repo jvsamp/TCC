@@ -17,6 +17,3 @@ export const Usuario = sequelize.define('Usuario', {
   contatoEmergTel: { type: DataTypes.STRING },
   senha: { type: DataTypes.STRING, allowNull: false }
 });
-
-// Sincroniza com o banco e cria as colunas automaticamente
-Usuario.sync({ alter: true });

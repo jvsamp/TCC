@@ -1,14 +1,13 @@
 {
   "name": "easyvacc-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Backend da aplicação EasyVacc",
+  "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsx src/index.ts",
     "dev": "tsx watch src/index.ts",
-    "postinstall": "prisma skills sync || exit 0",
-    "banco": "prisma db push"
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 0"
   },
   "keywords": [],
   "author": "",

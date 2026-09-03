@@ -8,4 +8,3 @@ export const Posto = sequelize.define('Posto', {
   horarioFuncionamento: { type: DataTypes.STRING }
 });
 
-Posto.sync({ alter: true });

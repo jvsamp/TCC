@@ -1,51 +1,9 @@
 // ======================================================
 // SERVIDOR PRINCIPAL - EASYVACC
 // ======================================================
-
 import express from 'express';
 import cors from 'cors';
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
-
-
-// ======================================================
-// VARIÁVEIS DE AMBIENTE
-// ======================================================
-
-// Carrega as configurações existentes no arquivo .env
-dotenv.config();
-
-
-// ======================================================
-// CONEXÃO COM O BANCO DE DADOS
-// ======================================================
-//
-// Em desenvolvimento:
-// usa as configurações do nosso .env local.
-//
-// Em produção:
-// a hospedagem fornecerá essas informações através
-// das variáveis de ambiente.
-//
-
-export const sequelize = new Sequelize(
-
-  process.env.DB_NAME || 'easyvacc',
-
-  process.env.DB_USER || 'root',
-
-  process.env.DB_PASS || '',
-
-  {
-    host: process.env.DB_HOST || 'localhost',
-
-    dialect: 'mysql',
-
-    port: Number(process.env.DB_PORT) || 3306,
-
-    logging: false
-  }
-);
+import sequelize from './database';
 
 
 // ======================================================
@@ -70,38 +28,96 @@ const app = express();
 // CORS
 // ======================================================
 //
-// Por enquanto permitimos requisições do frontend.
+// Local:
+// FRONTEND_URL=http://localhost:5173
 //
-// Depois podemos restringir para aceitar somente
-// o domínio oficial do EasyVacc.
+// Produção:
+// FRONTEND_URL=https://seu-frontend.vercel.app
 //
 
-app.use(cors());
+const frontendUrl =
+  process.env.FRONTEND_URL || 'http://localhost:5173';
+
+app.use(
+  cors({
+    origin: frontendUrl
+  })
+);
 
 
-// Permite que o Express receba JSON.
+// Permite receber JSON.
 app.use(express.json());
 
 
 // ======================================================
-// ROTA DE TESTE
+// ROTA PRINCIPAL
 // ======================================================
-//
-// Essa rota será muito útil depois do deploy.
-//
-// Quando acessarmos:
-//
-// https://URL-DO-BACKEND/
-//
-// devemos receber a mensagem abaixo.
-//
 
 app.get('/', (_req, res) => {
 
   res.json({
+
     sucesso: true,
-    mensagem: 'API EasyVacc está funcionando!'
+
+    mensagem:
+      'API EasyVacc está funcionando!'
+
   });
+
+});
+
+
+// ======================================================
+// HEALTH CHECK
+// ======================================================
+//
+// Essa rota será usada para verificar se a API
+// e o banco de dados estão funcionando.
+//
+// Local:
+// http://localhost:5000/api/health
+//
+// Produção:
+// https://seu-backend.vercel.app/api/health
+//
+
+app.get('/api/health', async (_req, res) => {
+
+  try {
+
+    await sequelize.authenticate();
+
+    res.json({
+
+      sucesso: true,
+
+      status: 'online',
+
+      banco: 'conectado',
+
+      timestamp:
+        new Date().toISOString()
+
+    });
+
+  } catch (error) {
+
+    console.error(
+      'Health check falhou:',
+      error
+    );
+
+    res.status(503).json({
+
+      sucesso: false,
+
+      status: 'offline',
+
+      banco: 'indisponível'
+
+    });
+
+  }
 
 });
 
@@ -118,14 +134,16 @@ const popularDadosReais = async () => {
     // POSTOS
     // ==================================================
 
-    const totalPostos = await Posto.count();
+    const totalPostos =
+      await Posto.count();
 
-    // Só cadastra os postos se a tabela estiver vazia.
+
     if (totalPostos === 0) {
 
       await Posto.create({
 
-        nome: 'Posto de Saúde Central de Saquarema',
+        nome:
+          'Posto de Saúde Central de Saquarema',
 
         endereco:
           'Rua Coronel Madureira, 77 - Centro, Saquarema - RJ',
@@ -140,7 +158,8 @@ const popularDadosReais = async () => {
 
       await Posto.create({
 
-        nome: 'UBS Bacaxá',
+        nome:
+          'UBS Bacaxá',
 
         endereco:
           'Av. Saquarema, 4500 - Bacaxá, Saquarema - RJ',
@@ -155,7 +174,8 @@ const popularDadosReais = async () => {
 
       await Posto.create({
 
-        nome: 'USF Jaconé',
+        nome:
+          'USF Jaconé',
 
         endereco:
           'Rua 13, s/n - Jaconé, Saquarema - RJ',
@@ -179,9 +199,10 @@ const popularDadosReais = async () => {
     // CAMPANHAS
     // ==================================================
 
-    const totalCampanhas = await Campanha.count();
+    const totalCampanhas =
+      await Campanha.count();
 
-    // Só cria campanhas caso ainda não existam.
+
     if (totalCampanhas === 0) {
 
       await Campanha.create({
@@ -192,9 +213,11 @@ const popularDadosReais = async () => {
         descricao:
           'Proteja-se contra os vírus da gripe mais circulantes. Direcionado a idosos, profissionais da saúde, gestantes e público prioritário.',
 
-        dataInicio: '01/04/2026',
+        dataInicio:
+          '01/04/2026',
 
-        dataFim: '31/05/2026'
+        dataFim:
+          '31/05/2026'
 
       });
 
@@ -207,9 +230,11 @@ const popularDadosReais = async () => {
         descricao:
           'Campanha voltada para atualização do cartão de vacinas de crianças, jovens e adultos na rede pública.',
 
-        dataInicio: '05/10/2026',
+        dataInicio:
+          '05/10/2026',
 
-        dataFim: '23/10/2026'
+        dataFim:
+          '23/10/2026'
 
       });
 
@@ -239,218 +264,255 @@ const popularDadosReais = async () => {
 
 // ---------------- CADASTRO ----------------
 
-app.post('/api/usuarios/cadastro', async (req, res) => {
+app.post(
+  '/api/usuarios/cadastro',
+  async (req, res) => {
 
-  try {
+    try {
 
-    const dados = req.body;
-
-    const novoUsuario =
-      await Usuario.create(dados);
-
-
-    res.json({
-
-      sucesso: true,
-
-      mensagem: 'Usuário cadastrado!',
-
-      dados: novoUsuario
-
-    });
+      const dados = req.body;
 
 
-  } catch (error) {
+      const novoUsuario =
+        await Usuario.create(dados);
 
-    console.error(
-      'Erro ao cadastrar usuário:',
-      error
-    );
-
-
-    res.status(400).json({
-
-      sucesso: false,
-
-      mensagem:
-        'Erro ao cadastrar usuário. Verifique se o CPF ou CNS já existem.'
-
-    });
-
-  }
-
-});
-
-
-// ---------------- LOGIN ----------------
-
-app.post('/api/usuarios/login', async (req, res) => {
-
-  try {
-
-    const { cpf, senha } = req.body;
-
-
-    // Procura o usuário através do CPF.
-    const usuario = await Usuario.findOne({
-
-      where: { cpf }
-
-    });
-
-
-    const userData =
-      usuario
-        ? (usuario.toJSON() as any)
-        : null;
-
-
-    // Compara a senha enviada com a cadastrada.
-    //
-    // IMPORTANTE:
-    // Para o TCC isso mantém o funcionamento atual.
-    // Futuramente o ideal é utilizar hash de senha.
-    if (
-      userData &&
-      userData.senha === senha
-    ) {
 
       res.json({
 
         sucesso: true,
 
-        mensagem: 'Login efetuado!',
+        mensagem:
+          'Usuário cadastrado!',
 
-        dados: {
-
-          id: userData.id,
-
-          nome: userData.nome
-
-        }
+        dados:
+          novoUsuario
 
       });
 
-    } else {
+    } catch (error) {
 
-      res.status(401).json({
+      console.error(
+        'Erro ao cadastrar usuário:',
+        error
+      );
+
+
+      res.status(400).json({
 
         sucesso: false,
 
-        mensagem: 'CPF ou senha incorretos.'
+        mensagem:
+          'Erro ao cadastrar usuário. Verifique se o CPF ou CNS já existem.'
 
       });
 
     }
 
-
-  } catch (error) {
-
-    console.error(
-      'Erro no login:',
-      error
-    );
+  }
+);
 
 
-    res.status(500).json({
+// ---------------- LOGIN ----------------
 
-      sucesso: false,
+app.post(
+  '/api/usuarios/login',
+  async (req, res) => {
 
-      mensagem: 'Erro no servidor.'
+    try {
 
-    });
+      const {
+        cpf,
+        senha
+      } = req.body;
+
+
+      const usuario =
+        await Usuario.findOne({
+
+          where: {
+            cpf
+          }
+
+        });
+
+
+      const userData =
+        usuario
+          ? (usuario.toJSON() as any)
+          : null;
+
+
+      if (
+        userData &&
+        userData.senha === senha
+      ) {
+
+        res.json({
+
+          sucesso: true,
+
+          mensagem:
+            'Login efetuado!',
+
+          dados: {
+
+            id:
+              userData.id,
+
+            nome:
+              userData.nome
+
+          }
+
+        });
+
+      } else {
+
+        res.status(401).json({
+
+          sucesso: false,
+
+          mensagem:
+            'CPF ou senha incorretos.'
+
+        });
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        'Erro no login:',
+        error
+      );
+
+
+      res.status(500).json({
+
+        sucesso: false,
+
+        mensagem:
+          'Erro no servidor.'
+
+      });
+
+    }
 
   }
-
-});
+);
 
 
 // ---------------- USUÁRIO POR ID ----------------
 
-app.get('/api/usuarios/:id', async (req, res) => {
+app.get(
+  '/api/usuarios/:id',
+  async (req, res) => {
 
-  try {
+    try {
 
-    const usuario =
-      await Usuario.findByPk(req.params.id);
-
-
-    res.json({
-
-      sucesso: true,
-
-      dados: usuario
-
-    });
+      const usuario =
+        await Usuario.findByPk(
+          req.params.id
+        );
 
 
-  } catch (error) {
+      res.json({
 
-    res.status(500).json({
+        sucesso: true,
 
-      sucesso: false,
-
-      mensagem: 'Erro ao buscar perfil.'
-
-    });
-
-  }
-
-});
-
-
-// ---------------- USUÁRIO POR CPF ----------------
-
-app.get('/api/usuarios/cpf/:cpf', async (req, res) => {
-
-  try {
-
-    const usuario =
-      await Usuario.findOne({
-
-        where: {
-          cpf: req.params.cpf
-        }
+        dados:
+          usuario
 
       });
 
+    } catch (error) {
 
-    if (!usuario) {
+      console.error(
+        'Erro ao buscar perfil:',
+        error
+      );
 
-      return res.status(404).json({
+
+      res.status(500).json({
 
         sucesso: false,
 
-        mensagem: 'Usuário não encontrado.'
+        mensagem:
+          'Erro ao buscar perfil.'
 
       });
 
     }
 
-
-    res.json({
-
-      sucesso: true,
-
-      dados: usuario
-
-    });
+  }
+);
 
 
-  } catch (error) {
+// ---------------- USUÁRIO POR CPF ----------------
 
-    res.status(500).json({
+app.get(
+  '/api/usuarios/cpf/:cpf',
+  async (req, res) => {
 
-      sucesso: false,
+    try {
 
-      mensagem:
-        'Erro ao buscar usuário por CPF.'
+      const usuario =
+        await Usuario.findOne({
 
-    });
+          where: {
+
+            cpf:
+              req.params.cpf
+
+          }
+
+        });
+
+
+      if (!usuario) {
+
+        return res.status(404).json({
+
+          sucesso: false,
+
+          mensagem:
+            'Usuário não encontrado.'
+
+        });
+
+      }
+
+
+      res.json({
+
+        sucesso: true,
+
+        dados:
+          usuario
+
+      });
+
+    } catch (error) {
+
+      console.error(
+        'Erro ao buscar usuário por CPF:',
+        error
+      );
+
+
+      res.status(500).json({
+
+        sucesso: false,
+
+        mensagem:
+          'Erro ao buscar usuário por CPF.'
+
+      });
+
+    }
 
   }
-
-});
+);
 
 
 // ======================================================
@@ -460,150 +522,196 @@ app.get('/api/usuarios/cpf/:cpf', async (req, res) => {
 
 // ---------------- LISTAR VACINAS ----------------
 
-app.get('/api/vacinas/:usuarioId', async (req, res) => {
+app.get(
+  '/api/vacinas/:usuarioId',
+  async (req, res) => {
 
-  try {
+    try {
 
-    const vacinas =
-      await Vacina.findAll({
+      const vacinas =
+        await Vacina.findAll({
 
-        where: {
-          usuarioId: req.params.usuarioId
-        }
+          where: {
+
+            usuarioId:
+              req.params.usuarioId
+
+          }
+
+        });
+
+
+      res.json({
+
+        sucesso: true,
+
+        dados:
+          vacinas
 
       });
 
+    } catch (error) {
 
-    res.json({
-
-      sucesso: true,
-
-      dados: vacinas
-
-    });
+      console.error(
+        'Erro ao buscar vacinas:',
+        error
+      );
 
 
-  } catch (error) {
+      res.status(500).json({
 
-    res.status(500).json({
+        sucesso: false,
 
-      sucesso: false,
+        mensagem:
+          'Erro ao buscar vacinas.'
 
-      mensagem: 'Erro ao buscar vacinas.'
+      });
 
-    });
+    }
 
   }
-
-});
+);
 
 
 // ---------------- REGISTRAR VACINA ----------------
 
-app.post('/api/vacinas', async (req, res) => {
+app.post(
+  '/api/vacinas',
+  async (req, res) => {
 
-  try {
+    try {
 
-    const novaVacina =
-      await Vacina.create(req.body);
-
-
-    res.json({
-
-      sucesso: true,
-
-      mensagem: 'Vacina registrada!',
-
-      dados: novaVacina
-
-    });
+      const novaVacina =
+        await Vacina.create(
+          req.body
+        );
 
 
-  } catch (error) {
+      res.json({
 
-    res.status(400).json({
+        sucesso: true,
 
-      sucesso: false,
+        mensagem:
+          'Vacina registrada!',
 
-      mensagem: 'Erro ao registrar vacina.'
+        dados:
+          novaVacina
 
-    });
+      });
+
+    } catch (error) {
+
+      console.error(
+        'Erro ao registrar vacina:',
+        error
+      );
+
+
+      res.status(400).json({
+
+        sucesso: false,
+
+        mensagem:
+          'Erro ao registrar vacina.'
+
+      });
+
+    }
 
   }
-
-});
+);
 
 
 // ======================================================
 // POSTOS
 // ======================================================
 
-app.get('/api/postos', async (_req, res) => {
+app.get(
+  '/api/postos',
+  async (_req, res) => {
 
-  try {
+    try {
 
-    const postos =
-      await Posto.findAll();
-
-
-    res.json({
-
-      sucesso: true,
-
-      dados: postos
-
-    });
+      const postos =
+        await Posto.findAll();
 
 
-  } catch (error) {
+      res.json({
 
-    res.status(500).json({
+        sucesso: true,
 
-      sucesso: false,
+        dados:
+          postos
 
-      mensagem: 'Erro ao buscar postos.'
+      });
 
-    });
+    } catch (error) {
+
+      console.error(
+        'Erro ao buscar postos:',
+        error
+      );
+
+
+      res.status(500).json({
+
+        sucesso: false,
+
+        mensagem:
+          'Erro ao buscar postos.'
+
+      });
+
+    }
 
   }
-
-});
+);
 
 
 // ======================================================
 // CAMPANHAS
 // ======================================================
 
-app.get('/api/campanhas', async (_req, res) => {
+app.get(
+  '/api/campanhas',
+  async (_req, res) => {
 
-  try {
+    try {
 
-    const campanhas =
-      await Campanha.findAll();
-
-
-    res.json({
-
-      sucesso: true,
-
-      dados: campanhas
-
-    });
+      const campanhas =
+        await Campanha.findAll();
 
 
-  } catch (error) {
+      res.json({
 
-    res.status(500).json({
+        sucesso: true,
 
-      sucesso: false,
+        dados:
+          campanhas
 
-      mensagem: 'Erro ao buscar campanhas.'
+      });
 
-    });
+    } catch (error) {
+
+      console.error(
+        'Erro ao buscar campanhas:',
+        error
+      );
+
+
+      res.status(500).json({
+
+        sucesso: false,
+
+        mensagem:
+          'Erro ao buscar campanhas.'
+
+      });
+
+    }
 
   }
-
-});
+);
 
 
 // ======================================================
@@ -624,40 +732,46 @@ app.get(
         await Vacina.findAll({
 
           where: {
+
             usuarioId
+
           }
 
         });
 
 
-      const notificacoesDinamicas: any[] = [
+      const notificacoesDinamicas:
+        any[] = [
 
-        {
+          {
 
-          id: 1,
+            id: 1,
 
-          titulo:
-            'Bem-vindo ao EasyVacc',
+            titulo:
+              'Bem-vindo ao EasyVacc',
 
-          mensagem:
-            'Sua caderneta digital está sincronizada com os servidores do SUS.',
+            mensagem:
+              'Sua caderneta digital está sincronizada com os servidores do SUS.',
 
-          lida: true
+            lida: true
 
-        }
+          }
 
-      ];
+        ];
 
 
-      // Cria notificações para próximas doses.
       vacinas.forEach(
-        (vacina: any, index: number) => {
+        (
+          vacina: any,
+          index: number
+        ) => {
 
           if (vacina.proximaDose) {
 
             notificacoesDinamicas.push({
 
-              id: index + 2,
+              id:
+                index + 2,
 
               titulo:
                 `Lembrete de Retorno: ${vacina.nome}`,
@@ -679,12 +793,18 @@ app.get(
 
         sucesso: true,
 
-        dados: notificacoesDinamicas
+        dados:
+          notificacoesDinamicas
 
       });
 
-
     } catch (error) {
+
+      console.error(
+        'Erro ao gerar notificações:',
+        error
+      );
+
 
       res.status(500).json({
 
@@ -718,8 +838,10 @@ app.get(
         await Dependente.findAll({
 
           where: {
+
             usuarioId:
               req.params.usuarioId
+
           }
 
         });
@@ -729,12 +851,18 @@ app.get(
 
         sucesso: true,
 
-        dados: dependentes
+        dados:
+          dependentes
 
       });
 
-
     } catch (error) {
+
+      console.error(
+        'Erro ao buscar dependentes:',
+        error
+      );
+
 
       res.status(500).json({
 
@@ -753,150 +881,217 @@ app.get(
 
 // ---------------- CADASTRAR DEPENDENTE ----------------
 
-app.post('/api/dependentes', async (req, res) => {
+app.post(
+  '/api/dependentes',
+  async (req, res) => {
 
-  try {
+    try {
 
-    const {
-      usuarioId,
-      nome,
-      parentesco,
-      dataNascimento
-    } = req.body;
+      const {
+        usuarioId,
+        nome,
+        parentesco,
+        dataNascimento
+      } = req.body;
 
 
-    // Verifica os campos obrigatórios.
-    if (
-      !usuarioId ||
-      !nome ||
-      !parentesco
-    ) {
+      if (
+        !usuarioId ||
+        !nome ||
+        !parentesco
+      ) {
 
-      return res.status(400).json({
+        return res.status(400).json({
+
+          sucesso: false,
+
+          mensagem:
+            'Preencha todos os campos obrigatórios.'
+
+        });
+
+      }
+
+
+      const novoDependente =
+        await Dependente.create({
+
+          usuarioId:
+            Number(usuarioId),
+
+          nome,
+
+          parentesco,
+
+          dataNascimento:
+            dataNascimento || null
+
+        });
+
+
+      res.json({
+
+        sucesso: true,
+
+        mensagem:
+          'Dependente cadastrado com sucesso!',
+
+        dados:
+          novoDependente
+
+      });
+
+    } catch (error) {
+
+      console.error(
+        'Erro ao cadastrar dependente:',
+        error
+      );
+
+
+      res.status(400).json({
 
         sucesso: false,
 
         mensagem:
-          'Preencha todos os campos obrigatórios.'
+          'Erro ao cadastrar dependente no banco de dados.'
 
       });
 
     }
 
-
-    const novoDependente =
-      await Dependente.create({
-
-        usuarioId:
-          Number(usuarioId),
-
-        nome,
-
-        parentesco,
-
-        dataNascimento:
-          dataNascimento || null
-
-      });
-
-
-    res.json({
-
-      sucesso: true,
-
-      mensagem:
-        'Dependente cadastrado com sucesso!',
-
-      dados: novoDependente
-
-    });
-
-
-  } catch (error) {
-
-    console.error(
-      'Erro ao cadastrar dependente:',
-      error
-    );
-
-
-    res.status(400).json({
-
-      sucesso: false,
-
-      mensagem:
-        'Erro ao cadastrar dependente no banco de dados.'
-
-    });
-
   }
-
-});
+);
 
 
 // ======================================================
-// PORTA DO SERVIDOR
+// INICIALIZAÇÃO DO BANCO
 // ======================================================
 //
-// Na hospedagem:
-// utiliza a porta fornecida pela plataforma.
+// Essa função pode ser chamada:
 //
-// No computador:
-// continua usando a porta 5000.
+// 1. Pelo servidor local;
+// 2. Pela Vercel.
+//
+// IMPORTANTE:
+// Não usamos force:true.
+// Isso evita apagar as tabelas e os dados.
+//
+
+let bancoInicializado: Promise<void> | null = null;
+
+
+export const inicializarBanco =
+  async (): Promise<void> => {
+
+    if (!bancoInicializado) {
+
+      bancoInicializado =
+        (async () => {
+
+          try {
+
+            await sequelize.authenticate();
+
+            console.log(
+              '📦 Conexão com banco de dados estabelecida!'
+            );
+
+
+            await sequelize.sync({
+              alter: false
+            });
+
+
+            console.log(
+              '📦 Banco de dados sincronizado com sucesso!'
+            );
+
+
+            await popularDadosReais();
+
+          } catch (error) {
+
+            console.error(
+              '❌ Erro ao conectar/sincronizar com o banco:',
+              error
+            );
+
+            // Permite uma nova tentativa caso a
+            // primeira inicialização tenha falhado.
+            bancoInicializado = null;
+
+            throw error;
+
+          }
+
+        })();
+
+    }
+
+
+    await bancoInicializado;
+
+  };
+
+
+// ======================================================
+// SERVIDOR LOCAL
+// ======================================================
+//
+// Na Vercel não usamos app.listen().
+// A Vercel utilizará o app exportado abaixo.
+//
+// Localmente:
+// npm start
+//
+// continuará funcionando na porta 5000.
 //
 
 const PORT =
   Number(process.env.PORT) || 5000;
 
 
-// ======================================================
-// INICIALIZAÇÃO DO SERVIDOR
-// ======================================================
-//
-// IMPORTANTE:
-//
-// Antes estava:
-//
-// sequelize.sync({ force: true })
-//
-// force:true APAGA as tabelas e cria novamente.
-//
-// Isso não pode ser utilizado em produção,
-// pois apagaria usuários, vacinas e dependentes.
-//
-// Agora utilizamos alter:false para preservar os dados.
-//
+if (
+  process.env.NODE_ENV !== 'production'
+) {
 
-sequelize
-  .sync({ alter: false })
+  inicializarBanco()
 
-  .then(async () => {
+    .then(() => {
 
-    console.log(
-      '📦 Banco de dados sincronizado com sucesso!'
-    );
+      app.listen(
+        PORT,
+        () => {
 
+          console.log(
+            `🚀 Servidor EasyVacc rodando na porta ${PORT}`
+          );
 
-    // Insere os dados iniciais somente se necessário.
-    await popularDadosReais();
-
-
-    // Inicia o servidor.
-    app.listen(PORT, () => {
-
-      console.log(
-        `🚀 Servidor EasyVacc rodando na porta ${PORT}`
+        }
       );
+
+    })
+
+    .catch((error) => {
+
+      console.error(
+        '❌ Não foi possível iniciar o servidor:',
+        error
+      );
+
+      process.exit(1);
 
     });
 
-  })
+}
 
-  .catch((err) => {
 
-    console.error(
-      '❌ Erro ao conectar/sincronizar com o banco:',
-      err
-    );
+// ======================================================
+// EXPORTAÇÃO
+// ======================================================
+//
+// Necessário para a Vercel utilizar o Express.
+//
 
-  });
+export default app;

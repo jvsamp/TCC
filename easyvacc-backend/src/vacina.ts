@@ -30,6 +30,3 @@ export const Vacina = sequelize.define('Vacina', {
 // Criando o Relacionamento (Chave Estrangeira)
 Usuario.hasMany(Vacina, { foreignKey: 'usuarioId' });
 Vacina.belongsTo(Usuario, { foreignKey: 'usuarioId' });
-
-// Sincroniza com o banco e cria a tabela
-Vacina.sync({ alter: true });

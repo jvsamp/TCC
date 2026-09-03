@@ -8,5 +8,3 @@ export const Campanha = sequelize.define('Campanha', {
   dataInicio: { type: DataTypes.STRING },
   dataFim: { type: DataTypes.STRING }
 });
-
-Campanha.sync({ alter: true });
